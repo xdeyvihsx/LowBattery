@@ -258,7 +258,6 @@ GameObject:
   - component: {fileID: 134558796}
   - component: {fileID: 134558795}
   - component: {fileID: 134558798}
-  - component: {fileID: 134558799}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -368,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd812dbd3d443045bda76ae30348755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  velocidadMovimiento: 2
+  velocidadMovimiento: 2.3
   fuerzaSalto: 5
   doubleJumpForce: 8
   dobleJumpActivo: 0
@@ -377,28 +376,6 @@ MonoBehaviour:
   capasSalto:
     serializedVersion: 2
     m_Bits: 64
---- !u!95 &134558799
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134558794}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 25cc5230d6abfc8468110d3510afc0d6, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &433503129
 GameObject:
   m_ObjectHideFlags: 0
