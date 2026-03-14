@@ -9,7 +9,6 @@ public class PlayerDeath : MonoBehaviour
 {
     [Header("Tiempos")]
     public float duracionAnimMuerte = 1.5f;
-    public float duracionInvencible = 2.5f;
 
     [Header("Efecto opcional")]
     public GameObject efectoMuerte;
@@ -111,24 +110,5 @@ public class PlayerDeath : MonoBehaviour
         // Limpiar estado de muerte
         estaMuerto = false;
 
-        // Invencibilidad temporal para evitar bucle de muerte
-        StartCoroutine(CoroutineInvencible());
-    }
-
-    IEnumerator CoroutineInvencible()
-    {
-        esInvencible = true;
-
-        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
-        float t = 0f;
-        while (t < duracionInvencible)
-        {
-            if (sr != null) sr.enabled = !sr.enabled;
-            yield return new WaitForSeconds(0.15f);
-            t += 0.15f;
-        }
-        if (sr != null) sr.enabled = true;
-
-        esInvencible = false;
     }
 }
