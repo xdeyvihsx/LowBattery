@@ -1,57 +1,134 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
+// Gestiona la muerte y el respawn del player.
+// Escucha dos fuentes de muerte:
+//   1. Colision con Layer "Obstacles" (muerte instantanea)
+//   2. PlayerData.OnBateriaVacia     (bateria llega a 0)
 public class PlayerDeath : MonoBehaviour
 {
-    [Header("Respawn")]
-    public float tiempoEsperaRespawn = 1.5f;
+    [Header("Tiempos")]
+    public float duracionAnimMuerte = 1.5f;
+    public float duracionInvencible = 2.5f;
 
-    [Header("Efecto visual al morir (opcional)")]
+    [Header("Efecto opcional")]
     public GameObject efectoMuerte;
 
-    private bool estaMuerto = false;
-    private PlayerMovement movimiento;
-    private int layerObstacles;
+    // Estado
+    private bool estaMuerto   = false;
+    private bool esInvencible = false;
 
+    // Posicion de spawn guardada al inicio
+    private Vector3 posicionSpawn;
+
+    // Referencias — todas en el mismo GameObject
+    private PlayerMovement movimiento;
+    private PlayerData     playerData;
+    private int            layerObstacles;
+
+    // ── Ciclo de vida ──────────────────────────────────────────
     void Start()
     {
         movimiento     = GetComponent<PlayerMovement>();
+        playerData     = GetComponent<PlayerData>();
         layerObstacles = LayerMask.NameToLayer("Obstacles");
+
+        // Guardar posicion de inicio del nivel
+        posicionSpawn = transform.position;
+
+        // Suscribirse a muerte por bateria
+        if (playerData != null)
+            playerData.OnBateriaVacia += TriggerMuertePorBateria;
     }
 
-    // Colision con Trigger (obstaculos con isTrigger = true)
+    void OnDestroy()
+    {
+        if (playerData != null)
+            playerData.OnBateriaVacia -= TriggerMuertePorBateria;
+    }
+
+    // ── Deteccion de colisiones letales ───────────────────────
     void OnTriggerEnter2D(Collider2D otro)
     {
-        if (estaMuerto) return;
+        if (estaMuerto || esInvencible) return;
         if (otro.gameObject.layer == layerObstacles)
-            StartCoroutine(MorirYRespawnear());
+            IniciarMuerte();
     }
 
-    // Colision fisica (obstaculos sin isTrigger)
-    void OnCollisionEnter2D(Collision2D colision)
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (estaMuerto || esInvencible) return;
+        if (col.gameObject.layer == layerObstacles)
+            IniciarMuerte();
+    }
+
+    // ── Muerte por bateria = 0 ────────────────────────────────
+    void TriggerMuertePorBateria() => IniciarMuerte();
+
+    // ── Flujo principal ────────────────────────────────────────
+    void IniciarMuerte()
     {
         if (estaMuerto) return;
-        if (colision.gameObject.layer == layerObstacles)
-            StartCoroutine(MorirYRespawnear());
+        StartCoroutine(CoroutineMuerte());
     }
 
-    IEnumerator MorirYRespawnear()
+    IEnumerator CoroutineMuerte()
     {
         estaMuerto = true;
 
-        // 1. Efecto visual si esta asignado
+        // 1. Efecto visual opcional
         if (efectoMuerte != null)
             Instantiate(efectoMuerte, transform.position, Quaternion.identity);
 
-        // 2. Delegar al PlayerMovement: detiene fisicas y lanza animacion Death
+        // 2. Congelar player + animacion Death
         if (movimiento != null)
             movimiento.ActivarMuerte();
 
-        // 3. Esperar que la animacion de muerte se reproduzca
-        yield return new WaitForSeconds(tiempoEsperaRespawn);
+        // 3. Pausar drenaje de bateria durante la muerte
+        if (playerData != null)
+            playerData.SetPausado(true);
 
-        // 4. Reiniciar la escena (estilo Geometry Dash)
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // 4. Esperar que termine la animacion de muerte
+        yield return new WaitForSeconds(duracionAnimMuerte);
+
+        // 5. Respawn
+        Respawnear();
+    }
+
+    void Respawnear()
+    {
+        // Teleportar al punto de inicio del nivel
+        transform.position = posicionSpawn;
+
+        // Resetear bateria a 15 y reactivar drenaje
+        if (playerData != null)
+            playerData.Resetear();
+
+        // Reactivar movimiento y animacion Run
+        if (movimiento != null)
+            movimiento.ActivarRespawn();
+
+        // Limpiar estado de muerte
+        estaMuerto = false;
+
+        // Invencibilidad temporal para evitar bucle de muerte
+        StartCoroutine(CoroutineInvencible());
+    }
+
+    IEnumerator CoroutineInvencible()
+    {
+        esInvencible = true;
+
+        SpriteRenderer sr = GetComponentInChildren<SpriteRenderer>();
+        float t = 0f;
+        while (t < duracionInvencible)
+        {
+            if (sr != null) sr.enabled = !sr.enabled;
+            yield return new WaitForSeconds(0.15f);
+            t += 0.15f;
+        }
+        if (sr != null) sr.enabled = true;
+
+        esInvencible = false;
     }
 }

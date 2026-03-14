@@ -1,59 +1,56 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Controla el movimiento del player.
+// Expone estaMuerto para que PlayerDeath lo controle.
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movimiento")]
-    public float velocidadMovimiento = 7f;
+    public float velocidadMovimiento = 2.8f;
 
     [Header("Salto")]
-    public float fuerzaSalto = 7f;
-    public float doubleJumpForce = 6f;
-    public bool dobleJumpActivo = false;
+    public float fuerzaSalto    = 5.5f;
+    public float doubleJumpForce = 8f;
+    public bool  dobleJumpActivo = false;
 
     [Header("Deteccion de Suelo")]
     public Transform controladorSuelo;
-    public Vector2 dimensionesCaja = new Vector2(0.5f, 0.28f);
+    public Vector2   dimensionesCaja = new Vector2(0.5f, 0.28f);
     public LayerMask capasSalto;
+
+    // Estado — PlayerDeath lo lee y escribe
+    [HideInInspector] public bool estaMuerto = false;
 
     // Referencias privadas
     private Rigidbody2D rb2D;
-    private Animator animator;
-    private bool enSuelo;
-    private bool tieneDobleJump;
+    private Animator    animator;
+    private bool        enSuelo;
+    private bool        tieneDobleJump;
 
-    // Flag para bloquear todo cuando el player muere
-    [HideInInspector] public bool estaMuerto = false;
+    // Hashes de parametros Animator
+    private static readonly int pEnSuelo   = Animator.StringToHash("EnSuelo");
+    private static readonly int pVelVert   = Animator.StringToHash("VelocidadVertical");
+    private static readonly int pVelHoriz  = Animator.StringToHash("VelocidadHorizontal");
+    private static readonly int pMuerto    = Animator.StringToHash("Muerto");
 
-    // Parametros del Animator
-    private static readonly int paramEnSuelo             = Animator.StringToHash("EnSuelo");
-    private static readonly int paramVelocidadVertical   = Animator.StringToHash("VelocidadVertical");
-    private static readonly int paramVelocidadHorizontal = Animator.StringToHash("VelocidadHorizontal");
-    private static readonly int paramMuerto              = Animator.StringToHash("Muerto");
-
+    // ── Ciclo de vida ──────────────────────────────────────────
     void Start()
     {
         rb2D     = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
-
-        if (animator == null)
-            Debug.LogWarning("[PlayerMovement] No se encontro Animator en los hijos.");
 
         if (controladorSuelo == null)
         {
             Transform fc = transform.Find("FloorController");
             if (fc != null) controladorSuelo = fc;
         }
-
         if (capasSalto.value == 0)
-            capasSalto = LayerMask.GetMask("Default");
+            capasSalto = LayerMask.GetMask("Suelo");
     }
 
     void Update()
     {
-        // Si el player esta muerto, no hacer nada
         if (estaMuerto) return;
-
         VerificarSuelo();
         ManejarSalto();
         ActualizarAnimaciones();
@@ -65,26 +62,22 @@ public class PlayerMovement : MonoBehaviour
         rb2D.linearVelocity = new Vector2(velocidadMovimiento, rb2D.linearVelocity.y);
     }
 
+    // ── Logica interna ─────────────────────────────────────────
     void VerificarSuelo()
     {
         if (controladorSuelo != null)
             enSuelo = Physics2D.OverlapBox(controladorSuelo.position, dimensionesCaja, 0f, capasSalto);
         else
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.65f, capasSalto);
-            enSuelo = hit.collider != null;
-        }
+            enSuelo = Physics2D.Raycast(transform.position, Vector2.down, 0.65f, capasSalto);
 
-        if (enSuelo)
-            tieneDobleJump = dobleJumpActivo;
+        if (enSuelo) tieneDobleJump = dobleJumpActivo;
     }
 
     void ManejarSalto()
     {
-        bool saltoPresionado = (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-                            || (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame);
-
-        if (!saltoPresionado) return;
+        bool salto = (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+                  || (Mouse.current   != null && Mouse.current.leftButton.wasPressedThisFrame);
+        if (!salto) return;
 
         if (enSuelo)
             Saltar(fuerzaSalto);
@@ -95,64 +88,63 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Saltar(float fuerza)
-    {
-        rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, fuerza);
-    }
+    void Saltar(float f) =>
+        rb2D.linearVelocity = new Vector2(rb2D.linearVelocity.x, f);
 
     void ActualizarAnimaciones()
     {
         if (animator == null || animator.runtimeAnimatorController == null) return;
-
-        animator.SetBool(paramEnSuelo, enSuelo);
-        animator.SetFloat(paramVelocidadHorizontal, velocidadMovimiento);
-
-        // Invertido: subiendo(vel.y>0) -> negativo -> threshold Jump=-1
-        //            cayendo(vel.y<0) -> positivo -> threshold Drop=+1
-        animator.SetFloat(paramVelocidadVertical, -rb2D.linearVelocity.y);
+        animator.SetBool (pEnSuelo,  enSuelo);
+        animator.SetFloat(pVelHoriz, velocidadMovimiento);
+        // Invertido: sube(vel.y>0)→negativo→Jump=-1 / cae(vel.y<0)→positivo→Drop=+1
+        animator.SetFloat(pVelVert, -rb2D.linearVelocity.y);
     }
 
-    // Llamado por PlayerDeath para activar la animacion de muerte
+    // ── API publica para PlayerDeath ───────────────────────────
+
+    /// Congela al player y dispara la animacion de Death.
     public void ActivarMuerte()
     {
         estaMuerto = true;
-
-        // Detener fisicas
         rb2D.linearVelocity = Vector2.zero;
         rb2D.simulated      = false;
 
-        // Activar animacion de Death en el Animator
         if (animator != null && animator.runtimeAnimatorController != null)
         {
-            // Usar el parametro Bool "Muerto" si existe, o forzar Play directo
-            // Intentamos SetBool primero; si no existe el param usamos Play como fallback
-            bool tieneParam = TieneParametro(paramMuerto);
-            if (tieneParam)
-            {
-                animator.SetBool(paramMuerto, true);
-            }
+            if (TieneParam(pMuerto))
+                animator.SetBool(pMuerto, true);
             else
-            {
-                // Forzar reproduccion directa del estado Death
                 animator.Play("Death");
-            }
         }
     }
 
-    // Verifica si el Animator tiene un parametro por hash
-    private bool TieneParametro(int hash)
+    /// Restaura al player despues del respawn.
+    public void ActivarRespawn()
     {
-        foreach (AnimatorControllerParameter p in animator.parameters)
+        rb2D.simulated      = true;
+        rb2D.linearVelocity = Vector2.zero;
+        estaMuerto          = false;
+
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            if (TieneParam(pMuerto))
+                animator.SetBool(pMuerto, false);
+            animator.Play("Run");
+        }
+    }
+
+    private bool TieneParam(int hash)
+    {
+        if (animator == null) return false;
+        foreach (var p in animator.parameters)
             if (p.nameHash == hash) return true;
         return false;
     }
 
     void OnDrawGizmosSelected()
     {
-        if (controladorSuelo != null)
-        {
-            Gizmos.color = enSuelo ? Color.green : Color.red;
-            Gizmos.DrawWireCube(controladorSuelo.position, dimensionesCaja);
-        }
+        if (controladorSuelo == null) return;
+        Gizmos.color = enSuelo ? Color.green : Color.red;
+        Gizmos.DrawWireCube(controladorSuelo.position, dimensionesCaja);
     }
 }

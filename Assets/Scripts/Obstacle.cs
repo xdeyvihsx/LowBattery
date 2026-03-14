@@ -1,16 +1,14 @@
 using UnityEngine;
 
-// Adjunta este script a cada obstaculo.
-// Fuerza el collider como Trigger en tiempo de ejecucion.
+// Adjunta a obstaculos LETALES (gato, cables).
+// Al tocar al player lo mata instantaneamente.
+[RequireComponent(typeof(Collider2D))]
 public class Obstacle : MonoBehaviour
 {
     void Awake()
     {
-        // Activar isTrigger en TODOS los colliders del objeto
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (Collider2D col in colliders)
-        {
+        // Forzar todos los colliders como trigger
+        foreach (var col in GetComponents<Collider2D>())
             col.isTrigger = true;
-        }
     }
 }
