@@ -22,32 +22,27 @@ public class PlayerMovement : MonoBehaviour
     private bool enSuelo;
     private bool tieneDobleJump;
 
-    // Parametros exactos del AnimatorController (imagen del Animator)
-    // BlendTree usa "VelocidadVertical" con threshold: Jump=-1, Drop=1
-    // Transicion Run->AnimationVertical usa "EnSuelo" = false
-    // Transicion AnimationVertical->Run usa "VelocidadHorizontal" < 0.1
-    private static readonly int paramEnSuelo            = Animator.StringToHash("EnSuelo");
-    private static readonly int paramVelocidadVertical  = Animator.StringToHash("VelocidadVertical");
+    // Flag para bloquear todo cuando el player muere
+    [HideInInspector] public bool estaMuerto = false;
+
+    // Parametros del Animator
+    private static readonly int paramEnSuelo             = Animator.StringToHash("EnSuelo");
+    private static readonly int paramVelocidadVertical   = Animator.StringToHash("VelocidadVertical");
     private static readonly int paramVelocidadHorizontal = Animator.StringToHash("VelocidadHorizontal");
+    private static readonly int paramMuerto              = Animator.StringToHash("Muerto");
 
     void Start()
     {
-        rb2D = GetComponent<Rigidbody2D>();
-
-        // Animator esta en el hijo "Sprite"
+        rb2D     = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
 
         if (animator == null)
             Debug.LogWarning("[PlayerMovement] No se encontro Animator en los hijos.");
 
-        // Auto-buscar FloorController hijo si no esta asignado en Inspector
         if (controladorSuelo == null)
         {
             Transform fc = transform.Find("FloorController");
-            if (fc != null)
-                controladorSuelo = fc;
-            else
-                Debug.LogWarning("[PlayerMovement] No se encontro FloorController como hijo del Player.");
+            if (fc != null) controladorSuelo = fc;
         }
 
         if (capasSalto.value == 0)
@@ -56,6 +51,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Si el player esta muerto, no hacer nada
+        if (estaMuerto) return;
+
         VerificarSuelo();
         ManejarSalto();
         ActualizarAnimaciones();
@@ -63,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Auto-movimiento horizontal (estilo Geometry Dash)
+        if (estaMuerto) return;
         rb2D.linearVelocity = new Vector2(velocidadMovimiento, rb2D.linearVelocity.y);
     }
 
@@ -106,18 +104,47 @@ public class PlayerMovement : MonoBehaviour
     {
         if (animator == null || animator.runtimeAnimatorController == null) return;
 
-        // EnSuelo: activa/desactiva la transicion hacia AnimationVertical
         animator.SetBool(paramEnSuelo, enSuelo);
-
-        // VelocidadHorizontal: para la transicion de regreso a Run
         animator.SetFloat(paramVelocidadHorizontal, velocidadMovimiento);
 
-        // VelocidadVertical: decide entre Jump y Drop dentro del BlendTree
-        // Tu BlendTree tiene Jump threshold=-1 y Drop threshold=1
-        // Por eso invertimos el signo: subiendo (vel.y > 0) -> valor negativo -> Jump
-        //                              cayendo  (vel.y < 0) -> valor positivo -> Drop
-        float velVertical = -rb2D.linearVelocity.y;
-        animator.SetFloat(paramVelocidadVertical, velVertical);
+        // Invertido: subiendo(vel.y>0) -> negativo -> threshold Jump=-1
+        //            cayendo(vel.y<0) -> positivo -> threshold Drop=+1
+        animator.SetFloat(paramVelocidadVertical, -rb2D.linearVelocity.y);
+    }
+
+    // Llamado por PlayerDeath para activar la animacion de muerte
+    public void ActivarMuerte()
+    {
+        estaMuerto = true;
+
+        // Detener fisicas
+        rb2D.linearVelocity = Vector2.zero;
+        rb2D.simulated      = false;
+
+        // Activar animacion de Death en el Animator
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            // Usar el parametro Bool "Muerto" si existe, o forzar Play directo
+            // Intentamos SetBool primero; si no existe el param usamos Play como fallback
+            bool tieneParam = TieneParametro(paramMuerto);
+            if (tieneParam)
+            {
+                animator.SetBool(paramMuerto, true);
+            }
+            else
+            {
+                // Forzar reproduccion directa del estado Death
+                animator.Play("Death");
+            }
+        }
+    }
+
+    // Verifica si el Animator tiene un parametro por hash
+    private bool TieneParametro(int hash)
+    {
+        foreach (AnimatorControllerParameter p in animator.parameters)
+            if (p.nameHash == hash) return true;
+        return false;
     }
 
     void OnDrawGizmosSelected()

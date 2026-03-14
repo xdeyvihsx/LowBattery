@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="HUD" style="flex-grow: 1; position: absolute; height: auto; width: 191px; top: 16px; left: 16px;">
+        <ui:Image name="ImgHUD" style="height: 63px; width: 193px; background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD.png?fileID=2800000&amp;guid=49ea118593ec06047bd0798da6ae68c4&amp;type=3#HUD&quot;); -unity-background-scale-mode: scale-to-fit;">
+            <ui:VisualElement name="Porcentaje" style="flex-grow: 1; position: absolute; height: 24px; width: 21px; top: 17px; left: 163px; justify-content: center; align-items: center;">
+                <ui:Label text="15" name="PorcentajeBateria" style="color: rgb(255, 255, 255); white-space: pre; -unity-text-align: middle-center; font-size: 13px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;); text-overflow: clip;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="BarraBaterria" style="flex-grow: 1; position: absolute; height: 18px; width: 84px; top: 20px; left: 62px; flex-direction: row; align-items: auto; justify-content: flex-start; align-self: auto; align-content: auto; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; aspect-ratio: auto; -unity-slice-type: tiled; flex-wrap: nowrap; flex-shrink: 1; margin-right: 0; margin-left: 1.4px;">
+                <ui:Image name="Barras" style="background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD_Porcentaje.png?fileID=2800000&amp;guid=b2d0ab4b713df784fabe7302bc53ed94&amp;type=3#HUD_Porcentaje&quot;); height: 18px; width: 13px; -unity-text-align: middle-left; margin-right: 1.3px;"/>
+                <ui:Image name="Barras" style="background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD_Porcentaje.png?fileID=2800000&amp;guid=b2d0ab4b713df784fabe7302bc53ed94&amp;type=3#HUD_Porcentaje&quot;); height: 18px; width: 13px; margin-right: 1px;"/>
+                <ui:Image name="Barras" style="background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD_Porcentaje.png?fileID=2800000&amp;guid=b2d0ab4b713df784fabe7302bc53ed94&amp;type=3#HUD_Porcentaje&quot;); height: 18px; width: 13px; margin-right: 1px;"/>
+                <ui:Image name="Barras" style="background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD_Porcentaje.png?fileID=2800000&amp;guid=b2d0ab4b713df784fabe7302bc53ed94&amp;type=3#HUD_Porcentaje&quot;); height: 18px; width: 13px; margin-right: 1px;"/>
+                <ui:Image name="Barras" style="background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD_Porcentaje.png?fileID=2800000&amp;guid=b2d0ab4b713df784fabe7302bc53ed94&amp;type=3#HUD_Porcentaje&quot;); height: 18px; width: 13px; margin-right: 1px;"/>
+                <ui:Image name="Barras" style="background-image: url(&quot;project://database/Assets/Sprites/HUD/HUD_Porcentaje.png?fileID=2800000&amp;guid=b2d0ab4b713df784fabe7302bc53ed94&amp;type=3#HUD_Porcentaje&quot;); height: 18px; width: 13px;"/>
+            </ui:VisualElement>
+        </ui:Image>
+    </ui:VisualElement>
+</ui:UXML>
