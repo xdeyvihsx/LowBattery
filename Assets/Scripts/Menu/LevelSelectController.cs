@@ -19,12 +19,15 @@ public class LevelSelectController : MonoBehaviour
     [Header("Velocidad fade selector")]
     public float velocidadFade = 0.15f;
 
+    // IDs exactos del UXML
     private const string ID_SLOT1 = "SlotRow1";
     private const string ID_SLOT2 = "SlotRow2";
     private const string ID_SLOT3 = "SlotRow3";
     private const string ID_SLOT4 = "SlotRow4";
     private const string ID_SLOT5 = "SlotRow5";
-    private const string ID_BACK  = "BackBtn";
+
+    // Posibles nombres del boton Back en el UXML
+    private static readonly string[] IDS_BACK = { "BackBtn", "BackButton", "Back", "BtnBack", "back-btn", "back" };
 
     private bool[] bloqueados = { false, true, true, true, true };
     private List<VisualElement> slots = new List<VisualElement>();
@@ -46,12 +49,61 @@ public class LevelSelectController : MonoBehaviour
         for (int i = 0; i < 5; i++)
             RegistrarSlot(root, ids[i], i, escenas[i]);
 
-        var back = root.Q<VisualElement>(ID_BACK);
-        if (back != null)
-            back.RegisterCallback<ClickEvent>(_ => SceneManager.LoadScene(escenaMenu));
+        // Buscar el boton Back por multiples posibles nombres
+        RegistrarBack(root);
 
         foreach (var s in slots)
             OcultarSelector(s);
+    }
+
+    // Busca el boton Back por varios posibles IDs y tambien por clase
+    void RegistrarBack(VisualElement root)
+    {
+        VisualElement back = null;
+
+        // 1. Buscar por los IDs mas comunes
+        foreach (var id in IDS_BACK)
+        {
+            back = root.Q<VisualElement>(id);
+            if (back != null) break;
+        }
+
+        // 2. Buscar por clase si no encontro por nombre
+        if (back == null)
+            back = root.Q<VisualElement>(className: "back-button");
+
+        // 3. Buscar cualquier Label/boton cuyo texto contenga "back" o "volver"
+        if (back == null)
+        {
+            back = root.Query<Label>().Where(l =>
+            {
+                string t = (l.text ?? "").ToLower();
+                return t.Contains("back") || t.Contains("volver") || t.Contains("menu");
+            }).First();
+        }
+
+        if (back == null)
+        {
+            Debug.LogWarning("[LevelSelect] No encontre el boton Back. " +
+                             "Verifica que su nombre en el UXML este en la lista o agrega su ID exacto.");
+            return;
+        }
+
+        Debug.Log($"[LevelSelect] Boton Back encontrado: '{back.name}'");
+
+        // Efecto hover
+        back.RegisterCallback<MouseEnterEvent>(_ => back.style.opacity = 0.6f);
+        back.RegisterCallback<MouseLeaveEvent>(_ => back.style.opacity = 1f);
+
+        // Click -> volver al menu
+        back.RegisterCallback<ClickEvent>(_ =>
+        {
+            Debug.Log($"[LevelSelect] Volviendo al menu: {escenaMenu}");
+            if (!string.IsNullOrEmpty(escenaMenu))
+                SceneManager.LoadScene(escenaMenu);
+            else
+                Debug.LogError("[LevelSelect] escenaMenu esta vacio en el Inspector.");
+        });
     }
 
     void RegistrarSlot(VisualElement root, string slotId, int idx, string escena)
@@ -74,8 +126,12 @@ public class LevelSelectController : MonoBehaviour
         });
 
         slot.RegisterCallback<ClickEvent>(_ => {
-            if (bloqueado) { Debug.Log("[LevelSelect] Nivel bloqueado"); return; }
-            if (!string.IsNullOrEmpty(escena)) SceneManager.LoadScene(escena);
+            if (bloqueado) { Debug.Log("[LevelSelect] Nivel " + (idx+1) + " bloqueado"); return; }
+            if (!string.IsNullOrEmpty(escena))
+            {
+                Debug.Log("[LevelSelect] Cargando: " + escena);
+                SceneManager.LoadScene(escena);
+            }
         });
     }
 
@@ -103,13 +159,15 @@ public class LevelSelectController : MonoBehaviour
 
     VisualElement ObtenerSelector(VisualElement slot)
     {
+        // Buscar por nombre que contenga palabras clave del selector
         foreach (var h in slot.Children())
         {
             string n = (h.name ?? "").ToLower();
-            if (n.Contains("selector") || n.Contains("sel") || n.Contains("arrow"))
+            if (n.Contains("selector") || n.Contains("arrow") || n.Contains("icon"))
                 return h;
             if (h.ClassListContains("slot-selector")) return h;
         }
+        // Fallback: primer hijo
         foreach (var h in slot.Children()) return h;
         return null;
     }
