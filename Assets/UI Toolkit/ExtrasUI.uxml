@@ -1,0 +1,42 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; align-items: center; justify-content: flex-start; background-image: url(&quot;project://database/Assets/Sprites/Menu/Fondo.png?fileID=2800000&amp;guid=30fd39c99b213fb47a8e46214ca6392c&amp;type=3#Fondo&quot;); -unity-background-scale-mode: stretch-to-fill; padding-top: 28px;">
+        <ui:VisualElement name="TitleBlock" style="align-items: center; margin-bottom: 24px;">
+            <ui:Label name="Title" text="Extras" style="color: rgb(255, 255, 255); font-size: 50px; font-weight: bold; letter-spacing: 5px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); margin-bottom: 8px;"/>
+            <ui:VisualElement name="Divider" style="flex-direction: row; align-items: center; width: 560px; height: 26px;">
+                <ui:VisualElement style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.28);"/>
+                <ui:Label text="❧" style="font-size: 28px; height: 36px; width: 37px; color: rgb(255, 255, 255); padding-left: 2px; margin-left: 4px;"/>
+                <ui:VisualElement style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.28);"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Body" style="flex-direction: row; flex-grow: 1; width: 860px; align-items: stretch;">
+            <ui:ScrollView name="AchievementScroll" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" style="flex-grow: 1; padding-right: 16px;">
+                <ui:VisualElement name="AchievementItem_Protected" style="flex-direction: row; align-items: center; padding-top: 10px; padding-bottom: 10px; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.07);">
+                    <ui:VisualElement name="Icon" style="width: 62px; height: 62px; border-radius: 4px; flex-shrink: 0; background-color: rgb(26, 32, 64); border-width: 1.5px; border-color: rgba(200, 210, 255, 0.18); margin-right: 18px; background-image: url(&quot;project://database/Assets/Sprites/ObjectsDamage/Teams.png?fileID=2800000&amp;guid=55869418747ac894e9fb14d75be7b9e9&amp;type=3#Teams&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+                    <ui:VisualElement name="TextBlock" style="flex-grow: 1; justify-content: center;">
+                        <ui:Label name="AchName" text="Deivids Jesus Ortega Quintero" style="color: rgb(212, 174, 106); font-size: 20px; font-weight: bold; letter-spacing: 2px; margin-bottom: 3px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                        <ui:Label name="AchDesc" text="Desing Audio, Desing Levels, Programing" style="color: rgb(136, 144, 184); font-size: 14px;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="AchievementItem_Blessed" style="flex-direction: row; align-items: center; padding-top: 10px; padding-bottom: 10px; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.07); opacity: 0.4;">
+                    <ui:VisualElement name="Icon" style="width: 62px; height: 62px; border-radius: 4px; flex-shrink: 0; background-color: rgb(22, 24, 40); border-width: 1.5px; border-color: rgba(180, 190, 255, 0.1); margin-right: 18px; background-image: url(&quot;project://database/Assets/Sprites/ObjectsDamage/Teams.png?fileID=2800000&amp;guid=55869418747ac894e9fb14d75be7b9e9&amp;type=3#Teams&quot;); -unity-background-scale-mode: scale-to-fit;"/>
+                    <ui:VisualElement name="TextBlock" style="flex-grow: 1; justify-content: center;">
+                        <ui:Label name="AchName" text="Blessed" style="color: rgb(120, 120, 160); font-size: 20px; font-weight: bold; letter-spacing: 2px; margin-bottom: 3px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                        <ui:Label name="AchDesc" text="Acquire all Charms and receive Salubra&apos;s blessing" style="color: rgb(100, 105, 140); font-size: 14px;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:ScrollView>
+            <ui:VisualElement name="ScrollbarDecorative" style="width: 20px; align-items: center; padding-top: 4px; flex-shrink: 0;">
+                <ui:Label text="❧" name="ArrowUp" style="color: rgb(255, 255, 255); font-size: 20px; margin-right: 2px; margin-top: 2px; padding-right: 1px; width: 21px;"/>
+                <ui:VisualElement name="ScrollLine" style="flex-grow: 1; width: 2px; background-color: rgba(200, 210, 255, 0.12); align-items: center; justify-content: center;">
+                    <ui:VisualElement name="ScrollThumb" style="width: 2px; height: 40px; background-color: rgba(176, 184, 224, 0.5); border-radius: 1px;"/>
+                </ui:VisualElement>
+                <ui:Label text="❧" name="ArrowDown" style="color: rgb(255, 255, 255); font-size: 20px; margin-right: 2px; margin-top: 2px; padding-right: 1px; width: 21px;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="BackRow" style="flex-direction: row; align-items: center; justify-content: center; gap: 12px; margin-top: 20px; margin-bottom: 16px;">
+            <ui:Label text="❖" style="color: rgb(255, 255, 255); font-size: 18px;"/>
+            <ui:Button name="BtnBack" text="Back" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(255, 255, 255); font-size: 24px; letter-spacing: 3px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+            <ui:Label text="❖" style="color: rgb(255, 255, 255); font-size: 18px;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
