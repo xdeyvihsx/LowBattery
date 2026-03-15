@@ -27,8 +27,9 @@ public class PauseMenuController : MonoBehaviour
     private Button[] botones;
     private int indexSeleccionado = 0;
 
-    // Referencia al audio del player
-    private PlayerSoundController sonido;
+    // Referencias de audio
+    private PlayerSoundController sonidoPlayer;
+    private LevelAudioManager     audioNivel;
 
     private static readonly Color COLOR_ACTIVO   = new Color(0.94f, 0.95f, 1.00f, 1f);
     private static readonly Color COLOR_INACTIVO = new Color(0.72f, 0.74f, 0.88f, 0.7f);
@@ -38,10 +39,8 @@ public class PauseMenuController : MonoBehaviour
         if (uiDocument == null)
             uiDocument = GetComponent<UIDocument>();
 
-        // Buscar PlayerSoundController en la escena
-        sonido = FindFirstObjectByType<PlayerSoundController>();
-        if (sonido == null)
-            Debug.LogWarning("[Pause] No se encontro PlayerSoundController en la escena.");
+        sonidoPlayer = FindFirstObjectByType<PlayerSoundController>();
+        audioNivel   = FindFirstObjectByType<LevelAudioManager>();
     }
 
     void OnEnable()
@@ -57,8 +56,8 @@ public class PauseMenuController : MonoBehaviour
         arrowR      = root.Q<VisualElement>(ID_ARROW_R);
 
         if (btnContinue == null) btnContinue = BuscarBoton(root, "continue", "continuar", "resume");
-        if (btnOptions  == null) btnOptions  = BuscarBoton(root, "option",   "opciones");
-        if (btnQuit     == null) btnQuit     = BuscarBoton(root, "quit",     "menu", "salir");
+        if (btnOptions  == null) btnOptions  = BuscarBoton(root, "option", "opciones");
+        if (btnQuit     == null) btnQuit     = BuscarBoton(root, "quit", "menu", "salir");
 
         botones = new Button[] { btnContinue, btnOptions, btnQuit };
 
@@ -101,15 +100,14 @@ public class PauseMenuController : MonoBehaviour
             EjecutarSeleccionado();
     }
 
-    // ── Pausa y reanuda ────────────────────────────────────────
-
     void Pausar()
     {
         pausado        = true;
         Time.timeScale = 0f;
 
-        // Pausar todos los audios del player
-        sonido?.PausarAudio();
+        // Pausar SFX del player + musica/ambiente del nivel
+        sonidoPlayer?.PausarAudio();
+        audioNivel?.PausarAudio();
 
         MostrarPanel(true);
         SeleccionarBoton(0);
@@ -120,8 +118,9 @@ public class PauseMenuController : MonoBehaviour
         pausado        = false;
         Time.timeScale = 1f;
 
-        // Reanudar todos los audios del player
-        sonido?.ReanudarAudio();
+        // Reanudar SFX del player + musica/ambiente del nivel
+        sonidoPlayer?.ReanudarAudio();
+        audioNivel?.ReanudarAudio();
 
         MostrarPanel(false);
     }
@@ -131,13 +130,11 @@ public class PauseMenuController : MonoBehaviour
         pausado        = false;
         Time.timeScale = 1f;
 
-        // Limpiar audio antes de salir
-        sonido?.ResetearAudio();
+        sonidoPlayer?.ResetearAudio();
+        audioNivel?.DetenerTodo();
 
         SceneManager.LoadScene(escenaGlobalLevels);
     }
-
-    // ── UI ─────────────────────────────────────────────────────
 
     void SeleccionarBoton(int index)
     {
