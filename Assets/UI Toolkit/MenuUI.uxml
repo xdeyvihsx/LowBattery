@@ -1,0 +1,44 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; justify-content: center; align-items: center; background-image: url(&quot;project://database/Assets/Sprites/Menu/Fondo.png?fileID=2800000&amp;guid=30fd39c99b213fb47a8e46214ca6392c&amp;type=3#Fondo&quot;); -unity-background-scale-mode: stretch-to-fill;">
+        <ui:VisualElement name="TitleBlock" style="align-items: center; margin-bottom: 40px;">
+            <ui:Label name="OrnamentTop" text="~ ~ ~ ~ ~ ~ ~ ~ ~ ~" style="color: rgba(255, 255, 255, 0.7); font-size: 25px; -unity-text-align: middle-center;"/>
+            <ui:Label name="GameTitle" text="LOW BATTRY" style="color: rgb(255, 255, 255); font-size: 90px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); -unity-text-align: middle-center; letter-spacing: 6px;"/>
+            <ui:Label name="OrnamentBottom" text="~ ~ ~ ~ ✦ ~ ~ ~ ~" style="color: rgba(255, 255, 255, 0.7); font-size: 25px; -unity-text-align: middle-center;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="MenuButtons" style="align-items: center; justify-content: center;">
+            <ui:VisualElement name="StartGameRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Button name="StartGame" text="Start Game" style="height: 56px; width: 260px; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="OptionsRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Button name="Options" text="Options" style="height: 56px; width: 260px; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="ExtrasRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Button name="Extras" text="Extras" style="height: 56px; width: 260px; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="QuitGameRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Button name="QuitGame" text="Quit Game" style="height: 56px; width: 260px; font-size: 30px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); color: rgb(255, 255, 255); background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 18px; width: 30px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="FooterLeft" style="position: absolute; left: 20px; bottom: 16px; flex-direction: column;">
+            <ui:VisualElement name="DLCIcons" style="flex-direction: row;">
+                <ui:VisualElement name="DLC1" style="width: 22px; height: 22px; border-radius: 11px; background-color: rgb(180, 80, 180); margin-right: 4px;"/>
+                <ui:VisualElement name="DLC2" style="width: 22px; height: 22px; border-radius: 11px; background-color: rgb(200, 60, 50); margin-right: 4px;"/>
+                <ui:VisualElement name="DLC3" style="width: 22px; height: 22px; border-radius: 11px; background-color: rgb(60, 140, 200); margin-right: 4px;"/>
+                <ui:VisualElement name="DLC4" style="width: 22px; height: 22px; border-radius: 11px; background-color: rgb(200, 140, 50);"/>
+            </ui:VisualElement>
+            <ui:Label name="Version" text="1.4.3.2" style="color: rgba(160, 160, 200, 0.8); font-size: 13px; margin-top: 4px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="FooterRight" style="position: absolute; right: 20px; bottom: 12px; align-items: center;">
+            <ui:VisualElement name="CherryLogo" style="width: 44px; height: 44px; border-radius: 22px; background-color: rgb(240, 240, 240);"/>
+            <ui:Label name="TeamCherry" text="team Unad" style="color: rgba(160, 160, 200, 0.8); font-size: 12px; -unity-text-align: middle-center;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

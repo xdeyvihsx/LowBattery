@@ -1,0 +1,77 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; justify-content: center; align-items: center; background-image: url(&quot;project://database/Assets/Sprites/Menu/Fondo.png?fileID=2800000&amp;guid=30fd39c99b213fb47a8e46214ca6392c&amp;type=3#Fondo&quot;); -unity-background-scale-mode: stretch-to-fill; padding-top: 32px;">
+        <ui:VisualElement name="TitleBlock" style="align-items: center; margin-bottom: 24px;">
+            <ui:Label name="Title" text="Select Levels" style="color: rgb(232, 234, 246); font-size: 56px; font-weight: bold; letter-spacing: 4px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); -unity-text-align: middle-center;"/>
+            <ui:VisualElement name="Divider" style="flex-direction: row; align-items: center; width: 500px; height: 20px; margin-top: 4px;">
+                <ui:VisualElement name="LineLeft" style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.35);"/>
+                <ui:Label name="Ornament" text=" ❧ " style="color: rgba(200, 204, 238, 0.8); font-size: 30px; -unity-text-align: middle-center;"/>
+                <ui:VisualElement name="LineRight" style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.35);"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="SlotList" style="width: 880px; align-items: stretch;">
+            <ui:VisualElement name="SlotRow1" style="flex-direction: row; align-items: center; margin-bottom: 0;">
+                <ui:Label name="SelectorLeft1" text="✦" style="color: rgb(200, 204, 232); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
+                <ui:Label name="Num1" text="1." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="LevelCard1" style="flex-grow: 1; min-height: 76px; background-color: rgb(26, 32, 96); border-radius: 4px; padding: 8px 14px; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.2); justify-content: space-between;">
+                    <ui:VisualElement name="LevelTop" style="flex-direction: row; align-items: center; gap: 10px;">
+                        <ui:VisualElement name="KnightIcon" style="width: 48px; height: 48px; border-radius: 24px; background-color: rgb(24, 32, 58); border-width: 1.5px; border-color: rgba(200, 210, 255, 0.3); align-items: center; justify-content: center;">
+                            <ui:VisualElement name="KnightFace" style="width: 30px; height: 30px; border-radius: 15px; background-color: rgb(216, 221, 245);"/>
+                        </ui:VisualElement>
+                        <ui:VisualElement name="HPRow" style="flex-direction: row; gap: 4px; align-items: center;">
+                            <ui:VisualElement style="width: 14px; height: 14px; border-radius: 7px; background-color: rgb(200, 204, 232);"/>
+                            <ui:VisualElement style="width: 14px; height: 14px; border-radius: 7px; background-color: rgb(200, 204, 232);"/>
+                            <ui:VisualElement style="width: 14px; height: 14px; border-radius: 7px; background-color: rgb(200, 204, 232);"/>
+                            <ui:VisualElement style="width: 14px; height: 14px; border-radius: 7px; background-color: rgb(200, 204, 232);"/>
+                            <ui:VisualElement style="width: 14px; height: 14px; border-radius: 7px; background-color: rgb(200, 204, 232);"/>
+                            <ui:VisualElement style="width: 14px; height: 14px; border-radius: 7px; background-color: rgba(200, 204, 232, 0.35);"/>
+                            <ui:VisualElement style="width: 11px; height: 11px; border-radius: 6px; background-color: rgb(112, 176, 255); margin-left: 4px;"/>
+                        </ui:VisualElement>
+                        <ui:Label name="Location" text="THE HOUSE 2a.m" style="color: rgb(224, 228, 255); font-size: 16px; font-weight: bold; letter-spacing: 2px; flex-grow: 1; -unity-text-align: middle-right; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="LevelBottom" style="flex-direction: row; align-items: center; gap: 6px;">
+                        <ui:VisualElement name="GeoIcon" style="width: 16px; height: 16px; border-radius: 8px; background-color: rgb(136, 136, 204);"/>
+                        <ui:Label name="GeoCount" text="52" style="color: rgb(184, 188, 238); font-size: 14px;"/>
+                        <ui:Label name="PlayTime" text="55m" style="color: rgb(136, 144, 184); font-size: 13px; flex-grow: 1; -unity-text-align: middle-right;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="StatusLevel1" style="align-items: center; gap: 4px; margin-left: 16px; width: 90px;">
+                    <ui:Label text="✦" style="color: rgb(176, 184, 224); font-size: 18px; -unity-text-align: middle-center;"/>
+                    <ui:Label text="completed" style="color: rgb(192, 200, 240); font-size: 14px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); -unity-text-align: middle-center;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="SlotRow2" style="flex-direction: row; align-items: center;">
+                <ui:Label name="SelectorLeft2" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
+                <ui:Label name="Num2" text="2." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SlotContent2" style="flex-grow: 1; min-height: 76px; justify-content: center; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.2); padding-left: 12px;">
+                    <ui:Label text="blocked" style="color: rgb(176, 184, 224); font-size: 24px; letter-spacing: 2px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                </ui:VisualElement>
+                <ui:VisualElement style="width: 106px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="SlotRow3" style="flex-direction: row; align-items: center;">
+                <ui:Label name="SelectorLeft3" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
+                <ui:Label name="Num3" text="3." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SlotContent3" style="flex-grow: 1; min-height: 76px; justify-content: center; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.2); padding-left: 12px;">
+                    <ui:Label text="blocked" style="color: rgb(176, 184, 224); font-size: 24px; letter-spacing: 2px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                </ui:VisualElement>
+                <ui:VisualElement style="width: 106px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="SlotRow4" style="flex-direction: row; align-items: center;">
+                <ui:Label name="SelectorLeft4" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
+                <ui:Label name="Num4" text="4." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SlotContent4" style="flex-grow: 1; min-height: 76px; justify-content: center; padding-left: 12px;">
+                    <ui:Label text="blocked" style="color: rgb(176, 184, 224); font-size: 24px; letter-spacing: 2px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                </ui:VisualElement>
+                <ui:VisualElement style="width: 106px;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="SlotRow5" style="flex-direction: row; align-items: center;">
+                <ui:Label name="SelectorLeft4" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
+                <ui:Label name="Num4" text="5." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SlotContent4" style="flex-grow: 1; min-height: 76px; justify-content: center; padding-left: 12px;">
+                    <ui:Label text="blocked" style="color: rgb(176, 184, 224); font-size: 24px; letter-spacing: 2px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                </ui:VisualElement>
+                <ui:VisualElement style="width: 106px;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="BackBtn" text="Back" style="margin-top: 28px; background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(144, 152, 200); font-size: 22px; letter-spacing: 3px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); -unity-text-align: middle-center;"/>
+    </ui:VisualElement>
+</ui:UXML>

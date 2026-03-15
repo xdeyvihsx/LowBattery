@@ -399,7 +399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageObstacle
   danoBateria: 5
-  cooldownSegundos: 1.5
+  cooldown: 1.5
   tipoObstaculo: Notificacion
 --- !u!61 &85858093
 BoxCollider2D:
@@ -562,6 +562,8 @@ GameObject:
   - component: {fileID: 134558798}
   - component: {fileID: 134558800}
   - component: {fileID: 134558801}
+  - component: {fileID: 134558803}
+  - component: {fileID: 134558802}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -680,6 +682,7 @@ MonoBehaviour:
   capasSalto:
     serializedVersion: 2
     m_Bits: 64
+  playerSoundController: {fileID: 134558802}
   estaMuerto: 0
 --- !u!70 &134558799
 CapsuleCollider2D:
@@ -730,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e77ea7f788c5ced4a9012861a738a57e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDeath
-  tiempoEsperaRespawn: 1.5
+  duracionAnimMuerte: 1.5
   efectoMuerte: {fileID: 0}
 --- !u!114 &134558801
 MonoBehaviour:
@@ -748,6 +751,128 @@ MonoBehaviour:
   bateriaActual: 15
   drenajeSegundo: 0.125
   drenajeActivo: 1
+--- !u!114 &134558802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134558794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0768529b45c8841a739a74a6dfa2e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSoundController
+  sourceLoop: {fileID: 0}
+  sourceOneShot: {fileID: 0}
+  RunSound: {fileID: 8300000, guid: 70a5c707fd067ea4f9bd817be8096393, type: 3}
+  runPitchMin: 0.95
+  runPitchMax: 1.05
+  JumpSound: {fileID: 0}
+  LandSound: {fileID: 0}
+  DeathSound: {fileID: 8300000, guid: de9d66099164d06428ff758275a4d3db, type: 3}
+  DamageSound: {fileID: 0}
+  RespawnSound: {fileID: 0}
+  volCorrer: 0.5
+  volAccion: 0.8
+  volMuerte: 1
+--- !u!82 &134558803
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134558794}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &206788413
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageObstacle
   danoBateria: 10
-  cooldownSegundos: 1.5
+  cooldown: 1.5
   tipoObstaculo: Notificacion
 --- !u!61 &206788416
 BoxCollider2D:
@@ -1941,7 +2066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageObstacle
   danoBateria: 2
-  cooldownSegundos: 1.5
+  cooldown: 1.5
   tipoObstaculo: Notificacion
 --- !u!61 &1163190053
 BoxCollider2D:
@@ -2671,11 +2796,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ee5dd20316fe474e9ead6b91790e1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HUDController
-  colorVerde: {r: 0, g: 0, b: 0, a: 1}
-  colorAmarillo: {r: 1, g: 0.85, b: 0.1, a: 1}
-  colorRojo: {r: 0.95, g: 0.15, b: 0.1, a: 1}
-  colorVacio: {r: 0.15, g: 0.15, b: 0.15, a: 0.4}
-  umbralVerde: 0.6
+  tinteSinColor: {r: 1, g: 1, b: 1, a: 1}
+  tinteAmarillo: {r: 1, g: 0.85, b: 0.1, a: 1}
+  tinteRojo: {r: 0.95, g: 0.15, b: 0.1, a: 1}
+  tinteVacio: {r: 0.15, g: 0.15, b: 0.15, a: 0.35}
+  umbralSinTinte: 0.6
   umbralAmarillo: 0.3
 --- !u!1 &1703341306
 GameObject:
@@ -2847,6 +2972,7 @@ GameObject:
   - component: {fileID: 1767164650}
   - component: {fileID: 1767164652}
   - component: {fileID: 1767164653}
+  - component: {fileID: 1767164654}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2996,6 +3122,14 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!81 &1767164654
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767164648}
+  m_Enabled: 1
 --- !u!1 &1863673247
 GameObject:
   m_ObjectHideFlags: 0
