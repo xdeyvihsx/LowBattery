@@ -6,11 +6,12 @@ using System.Collections.Generic;
 
 public class MenuController : MonoBehaviour
 {
-    [Header("Escena de juego")]
-    [Tooltip("Nombre exacto de la escena — debe estar en Build Settings")]
-    public string escenaJuego = "GlobalLevels";
+    [Header("Escenas")]
+    public string escenaJuego    = "GlobalLevels";
+    public string escenaOpciones = "Options";
+    public string escenaExtras   = "Extras";
 
-    [Header("Fade del icono en segundos")]
+    [Header("Velocidad fade icono en segundos")]
     public float velocidadFade = 0.18f;
 
     private const string ID_START   = "StartGameRow";
@@ -26,14 +27,12 @@ public class MenuController : MonoBehaviour
         var doc = GetComponent<UIDocument>();
         if (doc == null) return;
         var root = doc.rootVisualElement;
-        if (root == null) return;
-
         rows.Clear();
         fades.Clear();
 
         Bind(root, ID_START,   () => IrAJugar());
-        Bind(root, ID_OPTIONS, () => Debug.Log("Opciones"));
-        Bind(root, ID_EXTRAS,  () => Debug.Log("Extras"));
+        Bind(root, ID_OPTIONS, () => IrAOpciones());
+        Bind(root, ID_EXTRAS,  () => IrAExtras());
         Bind(root, ID_QUIT,    () => Salir());
 
         foreach (var r in rows) PintarIconos(r, 0f);
@@ -42,11 +41,7 @@ public class MenuController : MonoBehaviour
     void Bind(VisualElement root, string id, System.Action click)
     {
         var row = root.Q<VisualElement>(id);
-        if (row == null)
-        {
-            Debug.LogWarning("[Menu] No encontre: " + id);
-            return;
-        }
+        if (row == null) { Debug.LogWarning("[Menu] No encontre: " + id); return; }
         rows.Add(row);
         row.RegisterCallback<MouseEnterEvent>(_ => {
             foreach (var r in rows) if (r != row) Fade(r, 0f);
@@ -64,9 +59,9 @@ public class MenuController : MonoBehaviour
 
     IEnumerator DoFade(VisualElement row, float to)
     {
-        VisualElement izq = null, der = null;
         var hijos = new List<VisualElement>();
         foreach (var h in row.Children()) hijos.Add(h);
+        VisualElement izq = null, der = null;
 
         foreach (var h in hijos)
         {
@@ -104,12 +99,20 @@ public class MenuController : MonoBehaviour
 
     void IrAJugar()
     {
-        if (string.IsNullOrEmpty(escenaJuego))
-        {
-            Debug.LogError("[Menu] escenaJuego esta vacio. Escribe el nombre exacto en el Inspector.");
-            return;
-        }
+        if (string.IsNullOrEmpty(escenaJuego)) { Debug.LogError("[Menu] escenaJuego vacio."); return; }
         SceneManager.LoadScene(escenaJuego);
+    }
+
+    void IrAOpciones()
+    {
+        if (string.IsNullOrEmpty(escenaOpciones)) { Debug.LogError("[Menu] escenaOpciones vacio."); return; }
+        SceneManager.LoadScene(escenaOpciones);
+    }
+
+    void IrAExtras()
+    {
+        if (string.IsNullOrEmpty(escenaExtras)) { Debug.LogError("[Menu] escenaExtras vacio."); return; }
+        SceneManager.LoadScene(escenaExtras);
     }
 
     void Salir()
