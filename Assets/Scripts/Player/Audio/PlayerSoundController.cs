@@ -1,82 +1,60 @@
 using UnityEngine;
 
-// ─────────────────────────────────────────────────────────────────
-// PlayerSoundController — Motor de audio del player
-// Arquitectura profesional con AudioMixer-ready y pool de sources
-// ─────────────────────────────────────────────────────────────────
 [RequireComponent(typeof(AudioSource))]
 public class PlayerSoundController : MonoBehaviour
 {
-    // ── Sources separados por categoria (buena practica de audio) ──
     [Header("Audio Sources")]
-    [Tooltip("Para sonidos en loop (correr)")]
     public AudioSource sourceLoop;
-
-    [Tooltip("Para one-shots: salto, aterrizaje, dano, muerte")]
     public AudioSource sourceOneShot;
 
-    // ── Clips de movimiento ────────────────────────────────────────
     [Header("Movimiento")]
     public AudioClip RunSound;
-
-    [Tooltip("Pitch minimo aleatorio para variar el sonido de correr")]
-    [Range(0.8f, 1f)] public float runPitchMin = 0.95f;
-    [Range(1f, 1.2f)] public float runPitchMax = 1.05f;
+    [Range(0.8f, 1f)]  public float runPitchMin = 0.95f;
+    [Range(1f, 1.2f)]  public float runPitchMax = 1.05f;
 
     public AudioClip JumpSound;
     public AudioClip LandSound;
 
-    // ── Clips de estado ────────────────────────────────────────────
-    [Header("Estado del player")]
+    [Header("Estado")]
     public AudioClip DeathSound;
-    public AudioClip DamageSound;     // sonido al recibir dano (WhatsApp, Calls, Teams)
+    public AudioClip DamageSound;
     public AudioClip RespawnSound;
 
-    // ── Volúmenes por categoria ───────────────────────────────────
     [Header("Volumenes")]
-    [Range(0f, 1f)] public float volCorrer  = 0.5f;
-    [Range(0f, 1f)] public float volAccion  = 0.8f;
-    [Range(0f, 1f)] public float volMuerte  = 1.0f;
+    [Range(0f, 1f)] public float volCorrer = 0.5f;
+    [Range(0f, 1f)] public float volAccion = 0.8f;
+    [Range(0f, 1f)] public float volMuerte = 1.0f;
 
-    // ── Estado interno ─────────────────────────────────────────────
-    private bool corriendo    = false;
-    private bool estaMuerto   = false;
-    private bool enSuelo      = false;
+    private bool corriendo     = false;
+    private bool estaMuerto    = false;
     private bool estabaEnSuelo = false;
 
-    // ── Init ───────────────────────────────────────────────────────
+    // Guardamos si el loop estaba activo antes de pausar
+    private bool loopActivoAntesdePausa = false;
+
     void Awake()
     {
-        // Si no se asignaron en el Inspector, auto-crear los dos AudioSources
         AudioSource[] sources = GetComponents<AudioSource>();
 
         if (sourceLoop == null)
             sourceLoop = sources.Length > 0 ? sources[0] : gameObject.AddComponent<AudioSource>();
 
         if (sourceOneShot == null)
-        {
-            if (sources.Length > 1)
-                sourceOneShot = sources[1];
-            else
-                sourceOneShot = gameObject.AddComponent<AudioSource>();
-        }
+            sourceOneShot = sources.Length > 1 ? sources[1] : gameObject.AddComponent<AudioSource>();
 
-        // Configurar source de loop
-        sourceLoop.loop        = true;
-        sourceLoop.playOnAwake = false;
-        sourceLoop.volume      = volCorrer;
-        sourceLoop.spatialBlend = 0f; // 2D puro para juego 2D
+        sourceLoop.loop         = true;
+        sourceLoop.playOnAwake  = false;
+        sourceLoop.volume       = volCorrer;
+        sourceLoop.spatialBlend = 0f;
 
-        // Configurar source de one-shots
-        sourceOneShot.loop        = false;
-        sourceOneShot.playOnAwake = false;
-        sourceOneShot.volume      = volAccion;
+        sourceOneShot.loop         = false;
+        sourceOneShot.playOnAwake  = false;
+        sourceOneShot.volume       = volAccion;
         sourceOneShot.spatialBlend = 0f;
     }
 
-    // ── API publica — llamada desde PlayerMovement y PlayerDeath ──
+    // ── API de movimiento ──────────────────────────────────────
 
-    /// Inicia o detiene el sonido de correr en loop
     public void SetCorrer(bool activo)
     {
         if (estaMuerto) return;
@@ -85,8 +63,8 @@ public class PlayerSoundController : MonoBehaviour
         {
             if (RunSound != null)
             {
-                sourceLoop.clip   = RunSound;
-                sourceLoop.pitch  = Random.Range(runPitchMin, runPitchMax);
+                sourceLoop.clip  = RunSound;
+                sourceLoop.pitch = Random.Range(runPitchMin, runPitchMax);
                 sourceLoop.volume = volCorrer;
                 sourceLoop.Play();
             }
@@ -99,7 +77,6 @@ public class PlayerSoundController : MonoBehaviour
         }
     }
 
-    /// Llamado cuando el player salta
     public void PlayJump()
     {
         if (estaMuerto || JumpSound == null) return;
@@ -107,7 +84,6 @@ public class PlayerSoundController : MonoBehaviour
         sourceOneShot.PlayOneShot(JumpSound);
     }
 
-    /// Llamado cuando el player aterriza (transicion aire → suelo)
     public void PlayLand()
     {
         if (estaMuerto || LandSound == null) return;
@@ -115,7 +91,6 @@ public class PlayerSoundController : MonoBehaviour
         sourceOneShot.PlayOneShot(LandSound);
     }
 
-    /// Llamado cuando el player recibe dano (WhatsApp, Calls, Teams)
     public void PlayDamage()
     {
         if (estaMuerto || DamageSound == null) return;
@@ -123,12 +98,9 @@ public class PlayerSoundController : MonoBehaviour
         sourceOneShot.PlayOneShot(DamageSound);
     }
 
-    /// Llamado por PlayerDeath al morir
     public void PlayDeath()
     {
         estaMuerto = true;
-
-        // Detener loop de correr inmediatamente
         sourceLoop.Stop();
         corriendo = false;
 
@@ -139,11 +111,9 @@ public class PlayerSoundController : MonoBehaviour
         }
     }
 
-    /// Llamado por PlayerDeath al hacer respawn
     public void PlayRespawn()
     {
         estaMuerto = false;
-
         if (RespawnSound != null)
         {
             sourceOneShot.volume = volAccion;
@@ -151,7 +121,6 @@ public class PlayerSoundController : MonoBehaviour
         }
     }
 
-    /// Resetear estado (llamado en respawn)
     public void ResetearAudio()
     {
         estaMuerto = false;
@@ -160,14 +129,28 @@ public class PlayerSoundController : MonoBehaviour
         sourceOneShot.Stop();
     }
 
-    // ── Deteccion de aterrizaje (llamado desde PlayerMovement) ────
     public void ActualizarEstadoSuelo(bool esSuelo)
     {
-        // Detectar transicion de aire a suelo → aterrizaje
-        if (esSuelo && !estabaEnSuelo)
-            PlayLand();
-
+        if (esSuelo && !estabaEnSuelo) PlayLand();
         estabaEnSuelo = esSuelo;
-        enSuelo       = esSuelo;
+    }
+
+    // ── API de pausa ───────────────────────────────────────────
+
+    /// Llamado por PauseMenuController al pausar el juego
+    public void PausarAudio()
+    {
+        // Guardar si el loop estaba sonando para poder reanudarlo exactamente
+        loopActivoAntesdePausa = sourceLoop.isPlaying;
+
+        if (sourceLoop.isPlaying)   sourceLoop.Pause();
+        if (sourceOneShot.isPlaying) sourceOneShot.Pause();
+    }
+
+    /// Llamado por PauseMenuController al reanudar el juego
+    public void ReanudarAudio()
+    {
+        if (loopActivoAntesdePausa) sourceLoop.UnPause();
+        sourceOneShot.UnPause();
     }
 }
