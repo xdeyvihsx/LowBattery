@@ -34,7 +34,6 @@ public class MenuMusicManager : MonoBehaviour
         source              = GetComponent<AudioSource>();
         source.loop         = false;
         source.playOnAwake  = false;
-        source.volume       = volumen;
         source.spatialBlend = 0f;
         source.priority     = 0;
     }
@@ -109,6 +108,7 @@ public class MenuMusicManager : MonoBehaviour
 
         ultimaCancion = idx;
         source.clip   = clip;
+        source.volume = volumen;
         source.Play();
 
         if (corActiva != null) StopCoroutine(corActiva);
@@ -122,6 +122,12 @@ public class MenuMusicManager : MonoBehaviour
         if (!silenciado && !pausado) Siguiente();
     }
 
-    public void PausarMusica()   { if (!silenciado) { pausado = true;  source.Pause();    } }
-    public void ReanudarMusica() { if (!silenciado) { pausado = false; source.UnPause();  } }
+    // ── API publica ─────────────────────────────────────────────
+    public void AplicarVolumen()
+    {
+        if (source != null) source.volume = volumen;
+    }
+
+    public void PausarMusica()   { if (!silenciado) { pausado = true;  source.Pause();   } }
+    public void ReanudarMusica() { if (!silenciado) { pausado = false; source.UnPause(); } }
 }

@@ -5,33 +5,28 @@
             <ui:VisualElement name="Divider" style="flex-direction: row; align-items: center; width: 520px; height: 28px;">
                 <ui:VisualElement name="LineLeft" style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.3);"/>
                 <ui:VisualElement name="DividerOrnament" style="width: 48px; height: 44px; background-image: none; -unity-background-scale-mode: scale-to-fit; margin-left: 6px; margin-right: 6px; color: rgb(255, 255, 255); font-size: 30px;">
-                    <ui:Label text=" ❧ "/>
+                    <ui:Label text="❧ " style="padding-left: 2px; margin-left: 4px; margin-bottom: 2px; margin-top: 2px;"/>
                 </ui:VisualElement>
                 <ui:VisualElement name="LineRight" style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.3);"/>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="OptionsButtons" style="align-items: center; justify-content: center; flex-grow: 1;">
             <ui:VisualElement name="GameRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
-                <ui:Label name="ArrowL" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
                 <ui:Button name="BtnGame" text="Game" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(240, 242, 255); font-size: 28px; letter-spacing: 3px; width: 220px; height: 56px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:Label name="ArrowR" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
             </ui:VisualElement>
             <ui:VisualElement name="AudioRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
-                <ui:Label name="ArrowL" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
                 <ui:Button name="BtnAudio" text="Audio" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(176, 180, 216); font-size: 28px; letter-spacing: 3px; width: 220px; height: 56px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:Label name="ArrowR" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
             </ui:VisualElement>
             <ui:VisualElement name="VideoRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
-                <ui:Label name="ArrowL" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
                 <ui:Button name="BtnVideo" text="Video" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(176, 180, 216); font-size: 28px; letter-spacing: 3px; width: 220px; height: 56px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:Label name="ArrowR" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
-            </ui:VisualElement>
-            <ui:VisualElement name="KeyboardRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
-                <ui:Label name="ArrowL" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
-                <ui:Button name="BtnKeyboard" text="Keyboard" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(176, 180, 216); font-size: 28px; letter-spacing: 3px; width: 260px; height: 56px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:Label name="ArrowR" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
+                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Button name="BtnBack" text="Back" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(255, 255, 255); font-size: 24px; letter-spacing: 3px; width: 149px; height: 20px; margin-top: 20px; margin-bottom: 20px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); padding-top: 4px; padding-bottom: 4px; padding-left: 8px; padding-right: 8px;"/>
+        <ui:Button name="BackBtn" text="Back" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(255, 255, 255); font-size: 24px; letter-spacing: 3px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
     </ui:VisualElement>
 </ui:UXML>

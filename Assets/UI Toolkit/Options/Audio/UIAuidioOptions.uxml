@@ -1,0 +1,43 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; align-items: center; justify-content: flex-start; background-image: url(&quot;project://database/Assets/Sprites/Menu/Fondo.png?fileID=2800000&amp;guid=30fd39c99b213fb47a8e46214ca6392c&amp;type=3#Fondo&quot;); -unity-background-scale-mode: stretch-to-fill; padding-top: 28px;">
+        <ui:VisualElement name="TitleBlock" style="align-items: center; margin-bottom: 40px;">
+            <ui:Label name="Title" text="Audio" style="color: rgb(232, 234, 246); font-size: 52px; font-weight: bold; letter-spacing: 5px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;); margin-bottom: 8px;"/>
+            <ui:VisualElement name="Divider" style="flex-direction: row; align-items: center; width: 540px; height: 26px;">
+                <ui:VisualElement style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.28);"/>
+                <ui:Label text="❧" style="color: rgb(255, 255, 255); font-size: 28px; height: 34px; width: 37px; padding-left: 2px; margin-left: 4px;"/>
+                <ui:VisualElement style="flex-grow: 1; height: 1px; background-color: rgba(220, 225, 255, 0.28);"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="SettingsBlock" style="width: 700px; align-items: stretch; flex-grow: 1;">
+            <ui:VisualElement name="RowMaster" style="flex-direction: row; align-items: center; padding-top: 14px; padding-bottom: 14px;">
+                <ui:Label name="SelectorL_Master" text="❖" style="color: rgba(192, 196, 238, 0); font-size: 16px; width: 32px; -unity-text-align: middle-center;"/>
+                <ui:Label name="LabelMaster" text="Master Volume:" style="color: rgb(200, 204, 232); font-size: 20px; letter-spacing: 2px; width: 240px; flex-shrink: 0; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SliderWrap_Master" style="flex-grow: 1; margin-right: 12px;">
+                    <ui:SliderInt name="SliderMaster" low-value="0" high-value="10" value="10" style="flex-grow: 1; height: 20px; --unity-slider-border-radius: 2px;"/>
+                </ui:VisualElement>
+                <ui:Label name="ValueMaster" text="10" style="color: rgb(200, 204, 232); font-size: 20px; letter-spacing: 1px; width: 36px; -unity-text-align: middle-left;"/>
+                <ui:Label name="SelectorR_Master" text="❖" style="color: rgba(192, 196, 238, 0); font-size: 16px; width: 32px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="RowSound" style="flex-direction: row; align-items: center; padding-top: 14px; padding-bottom: 14px;">
+                <ui:Label name="SelectorL_Sound" text="❖" style="color: rgb(192, 196, 238); font-size: 16px; width: 32px; -unity-text-align: middle-center;"/>
+                <ui:Label name="LabelSound" text="Sound Volume:" style="color: rgb(240, 242, 255); font-size: 20px; letter-spacing: 2px; width: 240px; flex-shrink: 0; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SliderWrap_Sound" style="flex-grow: 1; margin-right: 12px;">
+                    <ui:SliderInt name="SliderSound" low-value="0" high-value="10" value="10" style="flex-grow: 1; height: 20px;"/>
+                </ui:VisualElement>
+                <ui:Label name="ValueSound" text="10" style="color: rgb(200, 204, 232); font-size: 20px; letter-spacing: 1px; width: 36px; -unity-text-align: middle-left;"/>
+                <ui:Label name="SelectorR_Sound" text="❖" style="color: rgb(192, 196, 238); font-size: 16px; width: 32px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="RowMusic" style="flex-direction: row; align-items: center; padding-top: 14px; padding-bottom: 14px;">
+                <ui:Label name="SelectorL_Music" text="❖" style="color: rgba(192, 196, 238, 0); font-size: 16px; width: 32px; -unity-text-align: middle-center;"/>
+                <ui:Label name="LabelMusic" text="Music Volume:" style="color: rgb(200, 204, 232); font-size: 20px; letter-spacing: 2px; width: 240px; flex-shrink: 0; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SliderWrap_Music" style="flex-grow: 1; margin-right: 12px;">
+                    <ui:SliderInt name="SliderMusic" low-value="0" high-value="10" value="10" style="flex-grow: 1; height: 20px;"/>
+                </ui:VisualElement>
+                <ui:Label name="ValueMusic" text="10" style="color: rgb(200, 204, 232); font-size: 20px; letter-spacing: 1px; width: 36px; -unity-text-align: middle-left;"/>
+                <ui:Label name="SelectorR_Music" text="❖" style="color: rgba(192, 196, 238, 0); font-size: 16px; width: 32px; -unity-text-align: middle-center;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="BtnResetDefaults" text="Reset Defaults" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(255, 255, 255); font-size: 24px; letter-spacing: 3px; margin-top: 48px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+        <ui:Button name="BtnBack" text="Back" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(255, 255, 255); font-size: 24px; letter-spacing: 3px; margin-top: 6px; margin-bottom: 20px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+    </ui:VisualElement>
+</ui:UXML>
