@@ -11,25 +11,10 @@
                 <ui:VisualElement style="flex-grow: 1; height: 1px; background-color: rgba(212, 192, 100, 0.3);"/>
             </ui:VisualElement>
             <ui:VisualElement name="StatsRow" style="flex-direction: row; gap: 28px; margin-bottom: 36px; justify-content: center; height: 135px; width: 473px; align-items: stretch; align-self: center;">
-                <ui:VisualElement name="StatTime" style="align-items: center; gap: 6px; padding: 14px 22px; background-color: rgba(212, 192, 100, 0.06); border-width: 1px; border-color: rgba(212, 192, 100, 0.15); border-radius: 4px; min-width: 90px; height: 135px; width: 98px;">
-                    <ui:Label text="⏱" style="font-size: 20px; -unity-text-align: middle-center; color: rgb(255, 255, 255);"/>
-                    <ui:Label name="StatTimeValue" text="1:24:36" style="color: rgb(224, 216, 152); font-size: 22px; font-weight: bold; -unity-text-align: middle-center; letter-spacing: 1px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                    <ui:Label text="Time" style="color: rgb(120, 128, 168); font-size: 12px; -unity-text-align: middle-center; letter-spacing: 2px;"/>
-                </ui:VisualElement>
                 <ui:VisualElement name="StatDeaths" style="align-items: center; gap: 6px; padding: 14px 22px; background-color: rgba(212, 192, 100, 0.06); border-width: 1px; border-color: rgba(212, 192, 100, 0.15); border-radius: 4px; min-width: 90px;">
                     <ui:Label text="☠" style="font-size: 20px; -unity-text-align: middle-center; color: rgb(255, 255, 255);"/>
                     <ui:Label name="StatDeathsValue" text="7" style="color: rgb(224, 216, 152); font-size: 22px; font-weight: bold; -unity-text-align: middle-center; letter-spacing: 1px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
                     <ui:Label text="Deaths" style="color: rgb(120, 128, 168); font-size: 12px; -unity-text-align: middle-center; letter-spacing: 2px;"/>
-                </ui:VisualElement>
-                <ui:VisualElement name="StatGeo" style="align-items: center; gap: 6px; padding: 14px 22px; background-color: rgba(212, 192, 100, 0.06); border-width: 1px; border-color: rgba(212, 192, 100, 0.15); border-radius: 4px; min-width: 90px; justify-content: center;">
-                    <ui:VisualElement name="GeoIcon" style="width: 20px; height: 20px; border-radius: 10px; background-color: rgb(120, 120, 192); border-width: 1px; border-color: rgb(160, 160, 220);"/>
-                    <ui:Label name="StatGeoValue" text="480" style="color: rgb(224, 216, 152); font-size: 22px; font-weight: bold; -unity-text-align: middle-center; letter-spacing: 1px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                    <ui:Label text="Geo" style="color: rgb(120, 128, 168); font-size: 12px; -unity-text-align: middle-center; letter-spacing: 2px;"/>
-                </ui:VisualElement>
-                <ui:VisualElement name="StatCharms" style="align-items: center; gap: 6px; padding: 14px 22px; background-color: rgba(212, 192, 100, 0.06); border-width: 1px; border-color: rgba(212, 192, 100, 0.15); border-radius: 4px; min-width: 90px;">
-                    <ui:Label text="✦" style="font-size: 20px; color: rgb(212, 192, 120); -unity-text-align: middle-center;"/>
-                    <ui:Label name="StatCharmsValue" text="12" style="color: rgb(224, 216, 152); font-size: 22px; font-weight: bold; -unity-text-align: middle-center; letter-spacing: 1px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                    <ui:Label text="Charms" style="color: rgb(120, 128, 168); font-size: 12px; -unity-text-align: middle-center; letter-spacing: 2px;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonsBlock" style="align-items: center; gap: 4px;">

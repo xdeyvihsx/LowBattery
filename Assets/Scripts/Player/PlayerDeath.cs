@@ -10,7 +10,10 @@ public class PlayerDeath : MonoBehaviour
     [Header("Efecto opcional")]
     public GameObject efectoMuerte;
 
-    // Evento publico — LevelAudioManager se suscribe para reiniciar la musica
+    // ── Contador de muertes — estatico para persistir entre respawns ──
+    public static int TotalMuertes { get; private set; } = 0;
+
+    // Evento que notifica al VictoryManager u otros sistemas
     public System.Action OnPlayerMurio;
 
     private bool estaMuerto   = false;
@@ -29,6 +32,9 @@ public class PlayerDeath : MonoBehaviour
         sonido         = GetComponent<PlayerSoundController>();
         layerObstacles = LayerMask.NameToLayer("Obstacles");
         posicionSpawn  = transform.position;
+
+        // Resetear contador al iniciar el nivel
+        TotalMuertes = 0;
 
         if (playerData != null)
             playerData.OnBateriaVacia += TriggerMuertePorBateria;
@@ -64,14 +70,18 @@ public class PlayerDeath : MonoBehaviour
     {
         estaMuerto = true;
 
-        // Disparar evento para que LevelAudioManager reinicie la musica
+        // Incrementar contador de muertes
+        TotalMuertes++;
+        Debug.Log("[PlayerDeath] Muertes: " + TotalMuertes);
+
+        // Notificar a LevelAudioManager para reiniciar musica
         OnPlayerMurio?.Invoke();
 
         if (efectoMuerte != null)
             Instantiate(efectoMuerte, transform.position, Quaternion.identity);
 
         if (movimiento != null) movimiento.ActivarMuerte();
-        if (playerData != null) playerData.SetPausado(true);
+        if (playerData  != null) playerData.SetPausado(true);
 
         yield return new WaitForSeconds(duracionAnimMuerte);
 
@@ -81,7 +91,7 @@ public class PlayerDeath : MonoBehaviour
     void Respawnear()
     {
         transform.position = posicionSpawn;
-        if (playerData != null) playerData.Resetear();
+        if (playerData  != null) playerData.Resetear();
         if (movimiento  != null) movimiento.ActivarRespawn();
         estaMuerto = false;
         StartCoroutine(CoroutineInvencible());
