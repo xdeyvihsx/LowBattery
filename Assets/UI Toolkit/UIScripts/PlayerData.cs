@@ -1,35 +1,44 @@
 using UnityEngine;
 
-// FUENTE CENTRAL DE VERDAD: toda la logica de bateria vive aqui.
-// PlayerDeath, PlayerDamage, HUDController y PowerUps hablan con este script.
 public class PlayerData : MonoBehaviour
 {
     public static PlayerData Instance { get; private set; }
 
-    [Header("Bateria — el nivel empieza con 15%")]
-    public float bateriaMaxima = 15f;
+    [Header("Bateria")]
+    [Tooltip("Maximo posible (100 = 100%)")]
+    public float bateriaMaxima = 100f;
+
+    [Tooltip("Bateria al iniciar el nivel - GDD: 15%")]
+    public float bateriaInicial = 15f;
 
     [HideInInspector] public float bateriaActual;
 
-    [Header("Drenaje pasivo (GDD: -1% cada 8s = 0.125/s)")]
+    [Header("Drenaje pasivo (GDD: -1% cada 8s)")]
     public float drenajeSegundo = 0.125f;
     public bool  drenajeActivo  = true;
 
-    // ── Eventos ────────────────────────────────────────────────
-    // Se dispara cada vez que cambia la bateria  → HUDController lo escucha
     public System.Action<float> OnBateriaChanged;
-    // Se dispara UNA sola vez cuando llega a 0  → PlayerDeath lo escucha
     public System.Action        OnBateriaVacia;
 
-    // Estado interno
     private bool yaDisparo0 = false;
     private bool pausado    = false;
 
-    // ── Ciclo de vida ──────────────────────────────────────────
     void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        // FORZAR valores correctos en Awake por si el Inspector tiene valores viejos
+        if (bateriaMaxima <= 15f)
+        {
+            Debug.LogWarning("[PlayerData] bateriaMaxima estaba en " + bateriaMaxima +
+                             " — corrigiendo a 100. Ajusta el Inspector manualmente.");
+            bateriaMaxima = 100f;
+        }
+        if (bateriaInicial > bateriaMaxima)
+        {
+            bateriaInicial = 15f;
+        }
     }
 
     void Start()
@@ -49,45 +58,43 @@ public class PlayerData : MonoBehaviour
             DispararMuerte();
     }
 
-    // ── API pública ────────────────────────────────────────────
-
-    /// Reinicia la bateria al maximo y habilita el drenaje.
-    /// Llamado al inicio del nivel y en cada respawn.
     public void Resetear()
     {
-        bateriaActual = bateriaMaxima;
+        bateriaActual = bateriaInicial;
         yaDisparo0    = false;
         pausado       = false;
         OnBateriaChanged?.Invoke(bateriaActual);
+
+        Debug.Log("[PlayerData] Bateria reseteada a: " + bateriaActual + " / " + bateriaMaxima);
     }
 
-    /// Obstaculos de dano (WhatsApp, Calls, Teams) llaman esto.
     public void RecibirDano(float cantidad)
     {
         if (pausado || yaDisparo0) return;
-
         bateriaActual = Mathf.Max(bateriaActual - cantidad, 0f);
         OnBateriaChanged?.Invoke(bateriaActual);
-
-        if (bateriaActual <= 0f)
-            DispararMuerte();
+        if (bateriaActual <= 0f) DispararMuerte();
     }
 
-    /// Power-ups llaman esto.
     public void RecargarBateria(float cantidad)
     {
         if (pausado) return;
+        float antes = bateriaActual;
         bateriaActual = Mathf.Min(bateriaActual + cantidad, bateriaMaxima);
         OnBateriaChanged?.Invoke(bateriaActual);
+        Debug.Log("[PlayerData] Recarga: +" + cantidad
+                  + " → " + antes + " → " + bateriaActual
+                  + " (max=" + bateriaMaxima + ")");
     }
 
-    /// Devuelve 0..1 para el HUD.
     public float GetPorcentaje() => bateriaActual / bateriaMaxima;
 
-    /// Congela el drenaje mientras el player esta muerto/en respawn.
-    public void SetPausado(bool valor) => pausado = valor;
+    public void SetPausado(bool valor)
+    {
+        pausado = valor;
+        if (valor) yaDisparo0 = true;
+    }
 
-    // ── Privado ────────────────────────────────────────────────
     private void DispararMuerte()
     {
         yaDisparo0 = true;

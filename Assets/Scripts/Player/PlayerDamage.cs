@@ -4,13 +4,8 @@ using UnityEngine;
 public class PlayerDamage : MonoBehaviour
 {
     [Header("Dano segun GDD")]
-    [Tooltip("-2% WhatsApp / -5% Llamada / -10% Teams")]
-    public float danoBateria = 2f;
-
-    [Tooltip("Segundos de cooldown entre golpes")]
-    public float cooldown = 1.5f;
-
-    [Header("Debug")]
+    public float danoBateria   = 2f;
+    public float cooldown      = 1.5f;
     public string tipoObstaculo = "Notificacion";
 
     private float timerCooldown = 0f;
@@ -25,8 +20,7 @@ public class PlayerDamage : MonoBehaviour
 
     void Update()
     {
-        if (timerCooldown > 0f)
-            timerCooldown -= Time.deltaTime;
+        if (timerCooldown > 0f) timerCooldown -= Time.deltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D otro)
@@ -47,20 +41,21 @@ public class PlayerDamage : MonoBehaviour
     {
         if (PlayerData.Instance == null) return;
 
-        // Verificar escudo de Modo Avion — si esta activo, bloquear el dano
-        if (PowerUpManager.EscudoAvionActivo)
+        // Verificar escudo — tanto el static como el Instance
+        bool escudoActivo = PowerUpManager.EscudoAvionActivo;
+        if (!escudoActivo && PowerUpManager.Instance != null)
+            escudoActivo = PowerUpManager.EscudoAvionActivo;
+
+        if (escudoActivo)
         {
-            Debug.Log("[" + tipoObstaculo + "] Dano bloqueado por Modo Avion!");
+            Debug.Log("[" + tipoObstaculo + "] BLOQUEADO por Modo Avion!");
             timerCooldown = cooldown;
             return;
         }
 
         PlayerData.Instance.RecibirDano(danoBateria);
-
-        PlayerSoundController snd = playerObj.GetComponent<PlayerSoundController>();
-        snd?.PlayDamage();
-
+        playerObj.GetComponent<PlayerSoundController>()?.PlayDamage();
         timerCooldown = cooldown;
-        Debug.Log("[" + tipoObstaculo + "] -" + danoBateria + "% bateria");
+        Debug.Log("[" + tipoObstaculo + "] -" + danoBateria + "%");
     }
 }
