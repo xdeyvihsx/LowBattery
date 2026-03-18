@@ -58,15 +58,15 @@
             <ui:VisualElement name="SlotRow4" style="flex-direction: row; align-items: center;">
                 <ui:Label name="SelectorLeft4" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
                 <ui:Label name="Num4" text="4." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:VisualElement name="SlotContent4" style="flex-grow: 1; min-height: 76px; justify-content: center; padding-left: 12px;">
+                <ui:VisualElement name="SlotContent4" style="flex-grow: 1; min-height: 76px; justify-content: center; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.2); padding-left: 12px;">
                     <ui:Label text="blocked" style="color: rgb(176, 184, 224); font-size: 24px; letter-spacing: 2px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
                 </ui:VisualElement>
                 <ui:VisualElement style="width: 106px;"/>
             </ui:VisualElement>
             <ui:VisualElement name="SlotRow5" style="flex-direction: row; align-items: center;">
-                <ui:Label name="SelectorLeft4" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
-                <ui:Label name="Num4" text="5." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:VisualElement name="SlotContent4" style="flex-grow: 1; min-height: 76px; justify-content: center; padding-left: 12px;">
+                <ui:Label name="SelectorLeft5" text="✦" style="color: rgba(200, 204, 232, 0); font-size: 22px; width: 36px; -unity-text-align: middle-center;"/>
+                <ui:Label name="Num5" text="5." style="color: rgb(210, 215, 248); font-size: 28px; font-weight: bold; width: 42px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
+                <ui:VisualElement name="SlotContent5" style="flex-grow: 1; min-height: 76px; justify-content: center; border-bottom-width: 1px; border-bottom-color: rgba(200, 210, 255, 0.2); padding-left: 12px;">
                     <ui:Label text="blocked" style="color: rgb(176, 184, 224); font-size: 24px; letter-spacing: 2px; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
                 </ui:VisualElement>
                 <ui:VisualElement style="width: 106px;"/>

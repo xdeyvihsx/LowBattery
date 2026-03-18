@@ -13,8 +13,11 @@ public class MenuMusicManager : MonoBehaviour
     public AudioClip cancion2;
     public AudioClip cancion3;
 
-    [Header("Volumen")]
+    [Header("Volumen base (se multiplica por PlayerPrefs al arrancar)")]
     [Range(0f, 1f)] public float volumen = 0.6f;
+
+    private const string KEY_MASTER = "vol_master";
+    private const string KEY_MUSIC  = "vol_music";
 
     private AudioSource source;
     private AudioClip[] canciones;
@@ -41,6 +44,13 @@ public class MenuMusicManager : MonoBehaviour
     void Start()
     {
         canciones = new AudioClip[] { cancion1, cancion2, cancion3 };
+
+        // Leer volumen guardado en PlayerPrefs al arrancar
+        float master = PlayerPrefs.GetFloat(KEY_MASTER, 1.0f);
+        float music  = PlayerPrefs.GetFloat(KEY_MUSIC,  volumen);
+        volumen       = music;
+        source.volume = music * master;
+
         SceneManager.sceneLoaded += AlCargarEscena;
         GenerarCola();
 
@@ -70,6 +80,12 @@ public class MenuMusicManager : MonoBehaviour
             {
                 silenciado = false;
                 pausado    = false;
+
+                // Reaplicar volumen guardado al volver al menu
+                float master = PlayerPrefs.GetFloat(KEY_MASTER, 1.0f);
+                float music  = PlayerPrefs.GetFloat(KEY_MUSIC,  volumen);
+                source.volume = music * master;
+
                 GenerarCola();
                 Siguiente();
             }
@@ -108,12 +124,10 @@ public class MenuMusicManager : MonoBehaviour
 
         ultimaCancion = idx;
         source.clip   = clip;
-        source.volume = volumen;
         source.Play();
 
         if (corActiva != null) StopCoroutine(corActiva);
         corActiva = StartCoroutine(Esperar(clip.length));
-        Debug.Log("[MenuMusic] Reproduciendo: " + clip.name);
     }
 
     IEnumerator Esperar(float dur)
