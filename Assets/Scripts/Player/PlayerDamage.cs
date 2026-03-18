@@ -20,7 +20,6 @@ public class PlayerDamage : MonoBehaviour
     {
         foreach (var col in GetComponents<Collider2D>())
             col.isTrigger = true;
-
         layerPlayer = LayerMask.NameToLayer("Player");
     }
 
@@ -48,14 +47,20 @@ public class PlayerDamage : MonoBehaviour
     {
         if (PlayerData.Instance == null) return;
 
-        // Bajar bateria
+        // Verificar escudo de Modo Avion — si esta activo, bloquear el dano
+        if (PowerUpManager.EscudoAvionActivo)
+        {
+            Debug.Log("[" + tipoObstaculo + "] Dano bloqueado por Modo Avion!");
+            timerCooldown = cooldown;
+            return;
+        }
+
         PlayerData.Instance.RecibirDano(danoBateria);
 
-        // Reproducir sonido de dano
         PlayerSoundController snd = playerObj.GetComponent<PlayerSoundController>();
         snd?.PlayDamage();
 
         timerCooldown = cooldown;
-        Debug.Log($"[{tipoObstaculo}] -{danoBateria}% bateria");
+        Debug.Log("[" + tipoObstaculo + "] -" + danoBateria + "% bateria");
     }
 }
