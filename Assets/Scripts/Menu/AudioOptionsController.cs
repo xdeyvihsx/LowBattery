@@ -8,33 +8,35 @@ public class AudioOptionsController : MonoBehaviour
     [Header("Datos de configuracion")]
     public AudioSettingsData audioData;
 
-    // IDs exactos del UXML (confirmados en UI Builder)
-    private const string ID_SLIDER_MASTER = "SliderMaster";
-    private const string ID_SLIDER_SOUND  = "SliderSound";
-    private const string ID_SLIDER_MUSIC  = "SliderMusic";
-    private const string ID_BTN_RESET     = "BtnResetDefaults";
-    private const string ID_BTN_BACK      = "BtnBack";
-    private const string ID_LABEL_MASTER  = "ValueMaster";
-    private const string ID_LABEL_SOUND   = "ValueSound";
-    private const string ID_LABEL_MUSIC   = "ValueMusic";
+    [Header("IDs exactos de tus sliders en el UXML")]
+    public string idSliderMaster = "SliderMaster";
+    public string idSliderMusic  = "SliderMusic";
+    public string idSliderSFX    = "SliderSound";
+    public string idBtnReset     = "BtnResetDefaults";
+    public string idBtnBack      = "BtnBack";
+    public string idLabelMaster  = "MasterValue";
+    public string idLabelMusic   = "MusicValue";
+    public string idLabelSFX     = "SFXValue";
 
-    // Los sliders van de 0 a 10 (SliderInt en UXML)
     private const int SLIDER_MAX = 10;
 
-    private UIDocument        doc;
-    private SliderInt         sliderMaster;
-    private SliderInt         sliderSound;
-    private SliderInt         sliderMusic;
-    private Label             labelMaster;
-    private Label             labelSound;
-    private Label             labelMusic;
-    private OptionsController optionsCtrl;
-    private bool              registrado = false;
+    private UIDocument doc;
+    private SliderInt  sliderMaster;
+    private SliderInt  sliderMusic;
+    private SliderInt  sliderSFX;
+    private Label      labelMaster;
+    private Label      labelMusic;
+    private Label      labelSFX;
+    private bool       registrado = false;
+
+    // Referencia directa al controlador padre — se asigna desde fuera
+    // En escena Options → asignado por OptionsController
+    // En Level_1 Pause  → asignado por InGameOptionsController
+    [HideInInspector] public System.Action onBack;
 
     void Awake()
     {
-        doc         = GetComponent<UIDocument>();
-        optionsCtrl = FindFirstObjectByType<OptionsController>();
+        doc = GetComponent<UIDocument>();
     }
 
     void OnEnable() { StartCoroutine(IniciarDelay()); }
@@ -44,126 +46,91 @@ public class AudioOptionsController : MonoBehaviour
     void Iniciar()
     {
         if (doc?.rootVisualElement == null) return;
-        if (audioData == null)
-        {
-            Debug.LogError("[AudioOptions] audioData NO asignado en el Inspector.");
-            return;
-        }
+        if (audioData == null) { Debug.LogError("[AudioOptions] audioData NO asignado."); return; }
 
         var root = doc.rootVisualElement;
 
-        // Buscar SliderInt (no Slider — el UXML usa SliderInt con rango 0-10)
-        sliderMaster = root.Q<SliderInt>(ID_SLIDER_MASTER);
-        sliderSound  = root.Q<SliderInt>(ID_SLIDER_SOUND);
-        sliderMusic  = root.Q<SliderInt>(ID_SLIDER_MUSIC);
+        sliderMaster = BuscarSlider(root, idSliderMaster);
+        sliderMusic  = BuscarSlider(root, idSliderMusic);
+        sliderSFX    = BuscarSlider(root, idSliderSFX);
+        labelMaster  = root.Q<Label>(idLabelMaster);
+        labelMusic   = root.Q<Label>(idLabelMusic);
+        labelSFX     = root.Q<Label>(idLabelSFX);
 
-        // Buscar labels de valor
-        labelMaster = root.Q<Label>(ID_LABEL_MASTER);
-        labelSound  = root.Q<Label>(ID_LABEL_SOUND);
-        labelMusic  = root.Q<Label>(ID_LABEL_MUSIC);
+        var todos = root.Query<SliderInt>().ToList();
+        if (sliderMaster == null && todos.Count >= 1) sliderMaster = todos[0];
+        if (sliderMusic  == null && todos.Count >= 2) sliderMusic  = todos[1];
+        if (sliderSFX    == null && todos.Count >= 3) sliderSFX    = todos[2];
 
-        Debug.Log("[AudioOptions] SliderInt encontrados: " +
-                  "Master=" + (sliderMaster != null) + " | " +
-                  "Sound="  + (sliderSound  != null) + " | " +
-                  "Music="  + (sliderMusic  != null));
-
-        // Configurar rango 0 a 10
-        ConfigurarSlider(sliderMaster);
-        ConfigurarSlider(sliderSound);
-        ConfigurarSlider(sliderMusic);
-
-        // Cargar valores guardados
+        ConfigSlider(sliderMaster);
+        ConfigSlider(sliderMusic);
+        ConfigSlider(sliderSFX);
         CargarValores();
 
-        // Registrar callbacks solo una vez
         if (!registrado)
         {
             if (sliderMaster != null)
                 sliderMaster.RegisterCallback<ChangeEvent<int>>(e =>
-                {
-                    float vol = IntAFloat(e.newValue);
-                    audioData.VolumenMaster = vol;
-                    ActualizarLabel(labelMaster, e.newValue);
-                });
-
-            if (sliderSound != null)
-                sliderSound.RegisterCallback<ChangeEvent<int>>(e =>
-                {
-                    float vol = IntAFloat(e.newValue);
-                    audioData.VolumenSFX = vol;
-                    ActualizarLabel(labelSound, e.newValue);
-                });
+                { audioData.VolumenMaster = IntAFloat(e.newValue); ActLabel(labelMaster, e.newValue); });
 
             if (sliderMusic != null)
                 sliderMusic.RegisterCallback<ChangeEvent<int>>(e =>
-                {
-                    float vol = IntAFloat(e.newValue);
-                    audioData.VolumenMusica = vol;
-                    ActualizarLabel(labelMusic, e.newValue);
-                });
+                { audioData.VolumenMusica = IntAFloat(e.newValue); ActLabel(labelMusic, e.newValue); });
 
-            // Boton Reset
-            var btnReset = root.Q<VisualElement>(ID_BTN_RESET);
-            if (btnReset != null)
-                btnReset.RegisterCallback<ClickEvent>(_ => Resetear());
-            else
-                Debug.LogWarning("[AudioOptions] BtnResetDefaults no encontrado.");
+            if (sliderSFX != null)
+                sliderSFX.RegisterCallback<ChangeEvent<int>>(e =>
+                { audioData.VolumenSFX = IntAFloat(e.newValue); ActLabel(labelSFX, e.newValue); });
 
-            // Boton Back
-            var btnBack = root.Q<VisualElement>(ID_BTN_BACK);
+            var btnReset = BuscarEl(root, idBtnReset, "reset", "Reset");
+            if (btnReset != null) btnReset.RegisterCallback<ClickEvent>(_ => Resetear());
+
+            // Back: usa el callback onBack asignado por el padre
+            var btnBack = BuscarEl(root, idBtnBack, "back", "Back", "close");
             if (btnBack != null)
-                btnBack.RegisterCallback<ClickEvent>(_ => optionsCtrl?.CerrarPanelActivo());
-            else
-                Debug.LogWarning("[AudioOptions] BtnBack no encontrado.");
+                btnBack.RegisterCallback<ClickEvent>(_ =>
+                {
+                    if (onBack != null)
+                        onBack.Invoke();
+                    else
+                        Debug.LogWarning("[AudioOptions] onBack no asignado.");
+                });
 
             registrado = true;
         }
     }
 
-    // ── Cargar valores desde PlayerPrefs ──────────────────────
     void CargarValores()
     {
         SetSlider(sliderMaster, FloatAInt(audioData.VolumenMaster));
-        SetSlider(sliderSound,  FloatAInt(audioData.VolumenSFX));
         SetSlider(sliderMusic,  FloatAInt(audioData.VolumenMusica));
-
-        ActualizarLabel(labelMaster, FloatAInt(audioData.VolumenMaster));
-        ActualizarLabel(labelSound,  FloatAInt(audioData.VolumenSFX));
-        ActualizarLabel(labelMusic,  FloatAInt(audioData.VolumenMusica));
-
-        // Aplicar volumenes al audio actual
+        SetSlider(sliderSFX,    FloatAInt(audioData.VolumenSFX));
+        ActLabel(labelMaster, FloatAInt(audioData.VolumenMaster));
+        ActLabel(labelMusic,  FloatAInt(audioData.VolumenMusica));
+        ActLabel(labelSFX,    FloatAInt(audioData.VolumenSFX));
         audioData.AplicarVolumenes();
     }
 
-    // ── Reset a valores por defecto ───────────────────────────
-    void Resetear()
+    void Resetear() { audioData.Resetear(); registrado = false; Iniciar(); }
+
+    float IntAFloat(int v)   => Mathf.Clamp01(v / (float)SLIDER_MAX);
+    int   FloatAInt(float v) => Mathf.RoundToInt(Mathf.Clamp01(v) * SLIDER_MAX);
+
+    void ConfigSlider(SliderInt s) { if (s != null) { s.lowValue = 0; s.highValue = SLIDER_MAX; } }
+    void SetSlider(SliderInt s, int v) { if (s != null) s.SetValueWithoutNotify(Mathf.Clamp(v, 0, SLIDER_MAX)); }
+    void ActLabel(Label l, int v) { if (l != null) l.text = Mathf.RoundToInt(IntAFloat(v) * 100f) + "%"; }
+
+    SliderInt BuscarSlider(VisualElement root, string id)
     {
-        audioData.Resetear();
-        registrado = false;
-        Iniciar();
-        Debug.Log("[AudioOptions] Reset a valores por defecto.");
+        if (string.IsNullOrEmpty(id)) return null;
+        var s = root.Q<SliderInt>(id);
+        if (s != null) return s;
+        return root.Query<SliderInt>().Where(e => (e.name ?? "").ToLower().Contains(id.ToLower())).First();
     }
 
-    // ── Helpers de conversion ──────────────────────────────────
-    // SliderInt va de 0 a 10 → float va de 0.0 a 1.0
-    float IntAFloat(int valor)  => Mathf.Clamp01(valor / (float)SLIDER_MAX);
-    int   FloatAInt(float valor) => Mathf.RoundToInt(Mathf.Clamp01(valor) * SLIDER_MAX);
-
-    void ConfigurarSlider(SliderInt s)
+    VisualElement BuscarEl(VisualElement root, params string[] ids)
     {
-        if (s == null) return;
-        s.lowValue  = 0;
-        s.highValue = SLIDER_MAX;
-    }
-
-    void SetSlider(SliderInt s, int valor)
-    {
-        if (s != null) s.SetValueWithoutNotify(Mathf.Clamp(valor, 0, SLIDER_MAX));
-    }
-
-    void ActualizarLabel(Label label, int valor)
-    {
-        if (label != null)
-            label.text = Mathf.RoundToInt(IntAFloat(valor) * 100f) + "%";
+        foreach (var id in ids) { var e = root.Q<VisualElement>(id); if (e != null) return e; }
+        foreach (var id in ids) { var e = root.Query<VisualElement>().Where(x => (x.name ?? "").ToLower().Contains(id.ToLower())).First(); if (e != null) return e; }
+        return null;
     }
 }

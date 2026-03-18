@@ -26,22 +26,15 @@ public class InGameOptionsController : MonoBehaviour
     private Dictionary<VisualElement, Coroutine> fades = new Dictionary<VisualElement, Coroutine>();
     private bool registrado = false;
 
-    void Awake()
-    {
-        doc = GetComponent<UIDocument>();
-    }
+    void Awake() { doc = GetComponent<UIDocument>(); }
 
     void Start()
     {
-        // Ocultar paneles hijos al inicio
         Ocultar(docAudio);
         Ocultar(docVideo);
-        // Registrar botones ahora que el GO esta activo
         Registrar();
     }
 
-    // Llamado por PauseMenuController al abrir Options
-    // El GO ya esta activo (nunca se desactiva), solo cambia display
     public void AlAbrir(PauseMenuController pause)
     {
         pauseCtrl   = pause;
@@ -58,14 +51,29 @@ public class InGameOptionsController : MonoBehaviour
         panelActivo = null;
     }
 
+    // Llamado por AudioOptionsController.onBack
+    public void CerrarPanelAudio()
+    {
+        Ocultar(docAudio);
+        panelActivo = null;
+        // Volver a mostrar OptionsInGame
+        if (doc?.rootVisualElement != null)
+            doc.rootVisualElement.style.display = DisplayStyle.Flex;
+    }
+
+    // Llamado por VideoOptionsController.onBack
+    public void CerrarPanelVideo()
+    {
+        Ocultar(docVideo);
+        panelActivo = null;
+        // Volver a mostrar OptionsInGame
+        if (doc?.rootVisualElement != null)
+            doc.rootVisualElement.style.display = DisplayStyle.Flex;
+    }
+
     void Registrar()
     {
-        if (doc?.rootVisualElement == null)
-        {
-            Debug.LogWarning("[InGameOpts] rootVisualElement es null en Registrar.");
-            return;
-        }
-
+        if (doc?.rootVisualElement == null) return;
         if (registrado) return;
 
         var root = doc.rootVisualElement;
@@ -73,8 +81,8 @@ public class InGameOptionsController : MonoBehaviour
         fades.Clear();
 
         BindRow(root, ID_ROW_GAME,  () => Debug.Log("[InGameOpts] Game"));
-        BindRow(root, ID_ROW_AUDIO, () => MostrarPanel(docAudio));
-        BindRow(root, ID_ROW_VIDEO, () => MostrarPanel(docVideo));
+        BindRow(root, ID_ROW_AUDIO, () => AbrirPanel(docAudio));
+        BindRow(root, ID_ROW_VIDEO, () => AbrirPanel(docVideo));
 
         var btnBack = root.Q<VisualElement>(ID_BACK);
         if (btnBack != null)
@@ -84,32 +92,52 @@ public class InGameOptionsController : MonoBehaviour
             btnBack.RegisterCallback<ClickEvent>(_ =>
             {
                 CerrarTodo();
+                if (doc?.rootVisualElement != null)
+                    doc.rootVisualElement.style.display = DisplayStyle.None;
                 pauseCtrl?.CerrarOptions();
             });
         }
-        else
-            Debug.LogWarning("[InGameOpts] No encontre BackBtn en OptionsUI.uxml");
 
         registrado = true;
-        Debug.Log("[InGameOpts] Registrado correctamente. Rows: " + rows.Count);
     }
 
-    void ResetIconos()
+    void AbrirPanel(UIDocument panel)
     {
-        foreach (var r in rows) SetOp(r, 0f);
+        if (panel == null) return;
+
+        // Ocultar OptionsInGame, mostrar el panel hijo
+        if (doc?.rootVisualElement != null)
+            doc.rootVisualElement.style.display = DisplayStyle.None;
+
+        if (panelActivo != null && panelActivo != panel) Ocultar(panelActivo);
+        panelActivo = panel;
+
+        // Asignar el callback onBack al panel hijo ANTES de mostrarlo
+        if (panel == docAudio)
+        {
+            var audioCtrl = panel.GetComponent<AudioOptionsController>();
+            if (audioCtrl != null)
+                audioCtrl.onBack = CerrarPanelAudio;
+        }
+        else if (panel == docVideo)
+        {
+            var videoCtrl = panel.GetComponent<VideoOptionsController>();
+            if (videoCtrl != null)
+                videoCtrl.onBack = CerrarPanelVideo;
+        }
+
+        if (panel.rootVisualElement != null)
+            panel.rootVisualElement.style.display = DisplayStyle.Flex;
     }
+
+    void ResetIconos() { foreach (var r in rows) SetOp(r, 0f); }
 
     void BindRow(VisualElement root, string id, System.Action accion)
     {
         var row = root.Q<VisualElement>(id);
         if (row == null) { Debug.LogWarning("[InGameOpts] No encontre: " + id); return; }
         rows.Add(row);
-
-        row.RegisterCallback<MouseEnterEvent>(_ =>
-        {
-            foreach (var r in rows) if (r != row) Fade(r, 0f);
-            Fade(row, 1f);
-        });
+        row.RegisterCallback<MouseEnterEvent>(_ => { foreach (var r in rows) if (r != row) Fade(r, 0f); Fade(row, 1f); });
         row.RegisterCallback<MouseLeaveEvent>(_ => Fade(row, 0f));
         row.RegisterCallback<ClickEvent>(_ => accion?.Invoke());
     }
@@ -124,7 +152,6 @@ public class InGameOptionsController : MonoBehaviour
     {
         var izq = row.Q<VisualElement>(ID_ICON_L);
         var der = row.Q<VisualElement>(ID_ICON_R);
-
         if (izq == null && der == null)
         {
             var h = new List<VisualElement>();
@@ -132,7 +159,6 @@ public class InGameOptionsController : MonoBehaviour
             if (h.Count >= 1) izq = h[0];
             if (h.Count >= 2) der = h[h.Count - 1];
         }
-
         float from = izq != null ? izq.resolvedStyle.opacity : 0f;
         float t = 0f;
         while (t < FADE)
@@ -153,15 +179,6 @@ public class InGameOptionsController : MonoBehaviour
         var der = row.Q<VisualElement>(ID_ICON_R);
         if (izq != null) izq.style.opacity = op;
         if (der != null) der.style.opacity = op;
-    }
-
-    void MostrarPanel(UIDocument panel)
-    {
-        if (panel == null) return;
-        if (panelActivo != null && panelActivo != panel) Ocultar(panelActivo);
-        panelActivo = panel;
-        if (panel.rootVisualElement != null)
-            panel.rootVisualElement.style.display = DisplayStyle.Flex;
     }
 
     void Ocultar(UIDocument panel)

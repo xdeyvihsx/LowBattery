@@ -23,17 +23,15 @@ public class VideoOptionsController : MonoBehaviour
         public System.Action<int> onChange;
     }
 
-    private List<Row>         rows;
-    private int               activeRow = 0;
-    private UIDocument        doc;
-    private OptionsController optsCtrl;
-    private bool              bound = false;
+    private List<Row>  rows;
+    private int        activeRow = 0;
+    private UIDocument doc;
+    private bool       bound = false;
 
-    void Awake()
-    {
-        doc      = GetComponent<UIDocument>();
-        optsCtrl = FindFirstObjectByType<OptionsController>();
-    }
+    // Callback asignado por el padre (OptionsController o InGameOptionsController)
+    [HideInInspector] public System.Action onBack;
+
+    void Awake() { doc = GetComponent<UIDocument>(); }
 
     void OnEnable() { StartCoroutine(DelayInit()); }
 
@@ -74,10 +72,22 @@ public class VideoOptionsController : MonoBehaviour
                 if (sl != null) sl.RegisterCallback<ClickEvent>(_ => Cycle(r, n, -1));
                 if (sr != null) sr.RegisterCallback<ClickEvent>(_ => Cycle(r, n, +1));
             }
+
             RegBtn(r, "BtnScreenScale",   ()=>Debug.Log("[Video] ScreenScale"));
             RegBtn(r, "BtnBrightness",    ()=>Debug.Log("[Video] Brightness"));
             RegBtn(r, "BtnResetDefaults", ()=>Reset(r));
-            RegBtn(r, "BtnBack",          ()=>optsCtrl?.CerrarPanelActivo());
+
+            // Back — usa el callback onBack asignado por el padre
+            var btnBack = r.Q<VisualElement>("BtnBack");
+            if (btnBack != null)
+                btnBack.RegisterCallback<ClickEvent>(_ =>
+                {
+                    if (onBack != null)
+                        onBack.Invoke();
+                    else
+                        Debug.LogWarning("[VideoOptions] onBack no asignado.");
+                });
+
             bound = true;
         }
 
@@ -91,16 +101,17 @@ public class VideoOptionsController : MonoBehaviour
         if (doc.rootVisualElement.style.display == DisplayStyle.None) return;
         if (Keyboard.current == null || rows == null) return;
         var r = doc.rootVisualElement;
-        if (Keyboard.current.downArrowKey.wasPressedThisFrame || Keyboard.current.sKey.wasPressedThisFrame)
+
+        if (Keyboard.current.downArrowKey.wasPressedThisFrame  || Keyboard.current.sKey.wasPressedThisFrame)
             SelectRow(r, (activeRow + 1) % rows.Count);
-        if (Keyboard.current.upArrowKey.wasPressedThisFrame || Keyboard.current.wKey.wasPressedThisFrame)
+        if (Keyboard.current.upArrowKey.wasPressedThisFrame    || Keyboard.current.wKey.wasPressedThisFrame)
             SelectRow(r, (activeRow - 1 + rows.Count) % rows.Count);
         if (Keyboard.current.rightArrowKey.wasPressedThisFrame || Keyboard.current.dKey.wasPressedThisFrame || Keyboard.current.enterKey.wasPressedThisFrame)
             Cycle(r, activeRow, +1);
-        if (Keyboard.current.leftArrowKey.wasPressedThisFrame || Keyboard.current.aKey.wasPressedThisFrame)
+        if (Keyboard.current.leftArrowKey.wasPressedThisFrame  || Keyboard.current.aKey.wasPressedThisFrame)
             Cycle(r, activeRow, -1);
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
-            optsCtrl?.CerrarPanelActivo();
+            onBack?.Invoke();
     }
 
     void SelectRow(VisualElement r, int n)
@@ -109,10 +120,10 @@ public class VideoOptionsController : MonoBehaviour
         for (int i = 0; i < rows.Count; i++)
         {
             bool a = i == n; var row = rows[i];
-            Col(r, row.idL,   a ? I_VIS  : I_HID);
-            Col(r, row.idR,   a ? I_VIS  : I_HID);
-            Col(r, row.idLbl, a ? C_ACT  : C_INAC);
-            Col(r, row.idVal, a ? C_ACT  : C_INAC);
+            Col(r, row.idL,   a ? I_VIS : I_HID);
+            Col(r, row.idR,   a ? I_VIS : I_HID);
+            Col(r, row.idLbl, a ? C_ACT : C_INAC);
+            Col(r, row.idVal, a ? C_ACT : C_INAC);
         }
     }
 
@@ -126,13 +137,11 @@ public class VideoOptionsController : MonoBehaviour
         row.onChange?.Invoke(row.idx);
     }
 
-    void SetLabel(VisualElement r, Row row)
-    { var l = r.Q<Label>(row.idVal); if (l != null) l.text = row.opts[row.idx]; }
+    void SetLabel(VisualElement r, Row row) { var l = r.Q<Label>(row.idVal); if (l != null) l.text = row.opts[row.idx]; }
 
     void Reset(VisualElement r)
     {
-        foreach (var row in rows)
-        { row.idx = 0; SetLabel(r, row); PlayerPrefs.SetInt(row.key, 0); row.onChange?.Invoke(0); }
+        foreach (var row in rows) { row.idx = 0; SetLabel(r, row); PlayerPrefs.SetInt(row.key, 0); row.onChange?.Invoke(0); }
         PlayerPrefs.Save();
     }
 
@@ -146,13 +155,11 @@ public class VideoOptionsController : MonoBehaviour
 
     void RegBtn(VisualElement r, string id, System.Action a)
     {
-        var el = r.Q<VisualElement>(id);
-        if (el == null) return;
+        var el = r.Q<VisualElement>(id); if (el == null) return;
         el.RegisterCallback<ClickEvent>(_ => a());
         el.RegisterCallback<MouseEnterEvent>(_ => el.style.color = new StyleColor(C_ACT));
         el.RegisterCallback<MouseLeaveEvent>(_ => el.style.color = new StyleColor(C_INAC));
     }
 
-    void Col(VisualElement r, string id, Color c)
-    { var el = r.Q<VisualElement>(id); if (el != null) el.style.color = new StyleColor(c); }
+    void Col(VisualElement r, string id, Color c) { var el = r.Q<VisualElement>(id); if (el != null) el.style.color = new StyleColor(c); }
 }

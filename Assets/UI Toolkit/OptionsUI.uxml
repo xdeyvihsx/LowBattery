@@ -11,11 +11,6 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="OptionsButtons" style="align-items: center; justify-content: center; flex-grow: 1;">
-            <ui:VisualElement name="GameRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
-                <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
-                <ui:Button name="BtnGame" text="Game" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(240, 242, 255); font-size: 28px; letter-spacing: 3px; width: 220px; height: 56px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
-                <ui:Label name="StartIconRight" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
-            </ui:VisualElement>
             <ui:VisualElement name="AudioRow" style="flex-direction: row; align-items: center; justify-content: center; height: 56px;">
                 <ui:Label name="StartIconLeft" text="❖" style="color: rgb(255, 255, 255); font-size: 16px; width: 30px; -unity-text-align: middle-center;"/>
                 <ui:Button name="BtnAudio" text="Audio" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(176, 180, 216); font-size: 28px; letter-spacing: 3px; width: 220px; height: 56px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/Font/Perpetua-Titling-Regular.otf?fileID=12800000&amp;guid=7fb653e74e5a2c045ac0260f9d6c7cf3&amp;type=3#Perpetua-Titling-Regular&quot;);"/>
