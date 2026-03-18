@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3ca1606fa82aefc42a3555ec767459f5
+guid: 112d020ff39c65248b37894d032fd550
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -798076587035678998
-    second: deivids - copia_0
+      213: -3019985028412158030
+    second: cuadro_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: deivids - copia_0
+      name: cuadro_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 720
-        height: 720
+        x: 2
+        y: 8
+        width: 1022
+        height: 1496
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ae6ae2e8299ace4f0800000000000000
-      internalID: -798076587035678998
+      spriteID: 2bfce720e9bd616d0800000000000000
+      internalID: -3019985028412158030
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      deivids - copia_0: -798076587035678998
+      cuadro_0: -3019985028412158030
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

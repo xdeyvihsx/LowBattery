@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c648793a2a340e148afe655776826b34
+guid: b15baba706d338e49a6b916f152b811a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4558540875486502593
-    second: Gemini_Generated_Image_rbzrvmrbzrvmrbzr-removebg-preview 1_0
+      213: -3117213662429087608
+    second: Gemini_Generated_Image_d9iomqd9iomqd9io-removebg-preview-artguru 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,17 +96,56 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Gemini_Generated_Image_rbzrvmrbzrvmrbzr-removebg-preview 1_0
+      name: Gemini_Generated_Image_d9iomqd9iomqd9io-removebg-preview-artguru 1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 11
         y: 0
-        width: 198
-        height: 245
+        width: 248
+        height: 493
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1ce987926c0334f30800000000000000
-      internalID: 4558540875486502593
+      spriteID: 8887be190be6db4d0800000000000000
+      internalID: -3117213662429087608
       vertices: []
       indices: 
       edges: []
@@ -135,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Gemini_Generated_Image_rbzrvmrbzrvmrbzr-removebg-preview 1_0: 4558540875486502593
+      Gemini_Generated_Image_d9iomqd9iomqd9io-removebg-preview-artguru 1_0: -3117213662429087608
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

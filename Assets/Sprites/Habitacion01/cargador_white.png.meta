@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: fa97d178f69a65241bde44c393513ca7
+guid: e50653b4aadf5d04da1835a7589cd814
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -967490360712845023
-    second: Whatsapp_0
+      213: -2408307031293264085
+    second: cargador_white_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 2
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Whatsapp_0
+      name: cargador_white_0
       rect:
         serializedVersion: 2
-        x: 106
-        y: 93
-        width: 776
-        height: 616
+        x: 34
+        y: 40
+        width: 1215
+        height: 673
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 129a81694a8c292f0800000000000000
-      internalID: -967490360712845023
+      spriteID: b2f70b9c389f39ed0800000000000000
+      internalID: -2408307031293264085
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Whatsapp_0: -967490360712845023
+      cargador_white_0: -2408307031293264085
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
