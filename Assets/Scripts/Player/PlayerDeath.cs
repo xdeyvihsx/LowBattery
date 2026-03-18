@@ -10,14 +10,15 @@ public class PlayerDeath : MonoBehaviour
     [Header("Efecto opcional")]
     public GameObject efectoMuerte;
 
-    // ── Contador de muertes — static persiste entre respawns ──
+    // Contador de muertes
     public static int TotalMuertes { get; private set; } = 0;
 
-    // Evento para LevelAudioManager (reiniciar musica)
+    // Eventos
     public System.Action OnPlayerMurio;
+    public System.Action OnRespawn;       // ← PowerUps se suscriben aqui
 
-    private bool estaMuerto   = false;
-    private bool esInvencible = false;
+    private bool    estaMuerto   = false;
+    private bool    esInvencible = false;
     private Vector3 posicionSpawn;
 
     private PlayerMovement        movimiento;
@@ -32,9 +33,7 @@ public class PlayerDeath : MonoBehaviour
         sonido         = GetComponent<PlayerSoundController>();
         layerObstacles = LayerMask.NameToLayer("Obstacles");
         posicionSpawn  = transform.position;
-
-        // Resetear contador al INICIAR el nivel (no en cada respawn)
-        TotalMuertes = 0;
+        TotalMuertes   = 0;
 
         if (playerData != null)
             playerData.OnBateriaVacia += TriggerMuertePorBateria;
@@ -46,35 +45,25 @@ public class PlayerDeath : MonoBehaviour
             playerData.OnBateriaVacia -= TriggerMuertePorBateria;
     }
 
-    // ── Colisiones con obstaculos letales ─────────────────────
     void OnTriggerEnter2D(Collider2D otro)
     {
         if (estaMuerto || esInvencible) return;
-        if (otro.gameObject.layer == layerObstacles)
-            IniciarMuerte();
+        if (otro.gameObject.layer == layerObstacles) IniciarMuerte();
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
         if (estaMuerto || esInvencible) return;
-        if (col.gameObject.layer == layerObstacles)
-            IniciarMuerte();
+        if (col.gameObject.layer == layerObstacles) IniciarMuerte();
     }
 
-    // ── Muerte por bateria = 0 ────────────────────────────────
-    // Se llama desde PlayerData.OnBateriaVacia
-    // NO tiene guard de estaMuerto/esInvencible porque la bateria
-    // puede llegar a 0 en cualquier momento, incluso durante invencibilidad
     void TriggerMuertePorBateria()
     {
-        // Contar SIEMPRE la muerte por bateria, sin importar el estado
         TotalMuertes++;
         Debug.Log("[PlayerDeath] Muerte por bateria. Total: " + TotalMuertes);
 
-        // Si ya esta en proceso de morir, no lanzar otra coroutine
         if (estaMuerto) return;
 
-        // Si esta en invencibilidad, cancelarla y morir igual
         if (esInvencible)
         {
             StopAllCoroutines();
@@ -90,20 +79,16 @@ public class PlayerDeath : MonoBehaviour
         StartCoroutine(CoroutineMuerte(contarMuerte: true));
     }
 
-    // contarMuerte = true  → muerte por obstaculo (se cuenta aqui)
-    // contarMuerte = false → muerte por bateria (ya se conto en TriggerMuertePorBateria)
     IEnumerator CoroutineMuerte(bool contarMuerte)
     {
         estaMuerto = true;
 
-        // Contar solo si es muerte por obstaculo
         if (contarMuerte)
         {
             TotalMuertes++;
             Debug.Log("[PlayerDeath] Muerte por obstaculo. Total: " + TotalMuertes);
         }
 
-        // Notificar para reiniciar musica
         OnPlayerMurio?.Invoke();
 
         if (efectoMuerte != null)
@@ -120,9 +105,19 @@ public class PlayerDeath : MonoBehaviour
     void Respawnear()
     {
         transform.position = posicionSpawn;
-        if (playerData  != null) playerData.Resetear();
+
+        if (playerData != null) playerData.Resetear();
         if (movimiento  != null) movimiento.ActivarRespawn();
+
+        // Limpiar efectos de power-ups activos
+        PowerUpManager.Instance?.LimpiarEfectos();
+
         estaMuerto = false;
+
+        // Notificar a todos los power-ups para que se reactiven
+        OnRespawn?.Invoke();
+        Debug.Log("[PlayerDeath] Respawn — Power-ups reiniciados.");
+
         StartCoroutine(CoroutineInvencible());
     }
 

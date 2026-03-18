@@ -2130,7 +2130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ebdada5a6ebe0b4081a44595ca084bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
-  bateriaMaxima: 15
+  bateriaMaxima: 100
   bateriaInicial: 15
   bateriaActual: 15
   drenajeSegundo: 0.125
