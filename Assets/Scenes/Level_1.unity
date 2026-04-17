@@ -1838,8 +1838,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 1.5
-  rangoVisible: 1
+  rangoDeteccion: 3
+  rangoVisible: 1.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -2133,7 +2133,7 @@ MonoBehaviour:
   bateriaMaxima: 100
   bateriaInicial: 15
   bateriaActual: 15
-  drenajeSegundo: 0.125
+  drenajeSegundo: 0.335
   drenajeActivo: 1
 --- !u!114 &134558802
 MonoBehaviour:
@@ -3158,8 +3158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 1.5
-  rangoVisible: 1
+  rangoDeteccion: 3
+  rangoVisible: 1.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -4544,7 +4544,7 @@ Transform:
   m_GameObject: {fileID: 703031367}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 64.47, y: -4.174, z: 0}
+  m_LocalPosition: {x: 65.014, y: -4.174, z: 0}
   m_LocalScale: {x: 1.2256292, y: 0.10313825, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8427,8 +8427,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 1.5
-  rangoVisible: 1
+  rangoDeteccion: 3
+  rangoVisible: 1.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -9073,6 +9073,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1291997213}
   - component: {fileID: 1291997212}
+  - component: {fileID: 1291997214}
   m_Layer: 5
   m_Name: UITutorial
   m_TagString: Untagged
@@ -9118,6 +9119,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1291997214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291997211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b516765d97e87a4684b15a2e2dea704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialController
+  pages:
+  - loreLine1: Higher beings, these words are for you alone.
+    loreLine2: "Master your movement \u2014 it is the difference between life and
+      shadow."
+    labelLeft: RUN
+    labelRight: JUMP
+    silhouetteLeft: {fileID: -2274363484027164459, guid: 6d915a156a2379e4781641652742be33, type: 3}
+    silhouetteRight: {fileID: -5089799229287275800, guid: 8017a0a841443464ebecc663a0e458b8, type: 3}
+    inputLeft: SPACE
+    inputRight: Left Click
+    loreLine3: "Jump \u2014 leap over obstacles and enemies"
+    loreLine4: "Left Click \u2014 Attack / Interact"
+    leftButton: {fileID: -5858099061022299432, guid: d6b24f03ade741948923c80f4c388e4f, type: 3}
+    rightButton: {fileID: -6251650479528684544, guid: 48bf83f0a8c1108479bc929add2764c7, type: 3}
+  - loreLine1: 
+    loreLine2: 
+    labelLeft: 
+    labelRight: 
+    silhouetteLeft: {fileID: 0}
+    silhouetteRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+    loreLine3: 
+    loreLine4: 
+    leftButton: {fileID: 0}
+    rightButton: {fileID: 0}
+  - loreLine1: 
+    loreLine2: 
+    labelLeft: 
+    labelRight: 
+    silhouetteLeft: {fileID: 0}
+    silhouetteRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+    loreLine3: 
+    loreLine4: 
+    leftButton: {fileID: 0}
+    rightButton: {fileID: 0}
+  - loreLine1: 
+    loreLine2: 
+    labelLeft: 
+    labelRight: 
+    silhouetteLeft: {fileID: 0}
+    silhouetteRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+    loreLine3: 
+    loreLine4: 
+    leftButton: {fileID: 0}
+    rightButton: {fileID: 0}
+  sortingOrder: 100
 --- !u!1 &1341901972
 GameObject:
   m_ObjectHideFlags: 0
@@ -12350,8 +12414,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 1.5
-  rangoVisible: 1
+  rangoDeteccion: 3
+  rangoVisible: 1.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -14732,6 +14796,7 @@ SceneRoots:
   - {fileID: 1131669824}
   - {fileID: 1236237091}
   - {fileID: 393460766}
+  - {fileID: 424193573}
   - {fileID: 324350773}
   - {fileID: 1783074561}
   - {fileID: 1869991143}
@@ -14739,5 +14804,4 @@ SceneRoots:
   - {fileID: 273050327}
   - {fileID: 1127117802}
   - {fileID: 46501255}
-  - {fileID: 424193573}
   - {fileID: 1975032031}

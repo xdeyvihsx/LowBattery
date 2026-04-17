@@ -7,27 +7,24 @@ using System.Collections.Generic;
 [System.Serializable]
 public class TutorialPage
 {
-    [Header("Texto narrativo")]
     public string loreLine1 = "";
     public string loreLine2 = "";
-    [Header("Etiquetas de paneles")]
     public string labelLeft  = "";
     public string labelRight = "";
-    [Header("Silhouettes")]
     public Sprite silhouetteLeft;
     public Sprite silhouetteRight;
-    [Header("Hints de input")]
     public string inputLeft  = "";
     public string inputRight = "";
+    public string loreLine3 = "";
+    public string loreLine4 = "";
+    public Sprite leftButton;
+    public Sprite rightButton;
 }
 
 [RequireComponent(typeof(UIDocument))]
 public class TutorialController : MonoBehaviour
 {
-    [Header("Paginas del tutorial")]
     [SerializeField] private List<TutorialPage> pages = new List<TutorialPage>();
-
-    [Header("Sorting Order (encima de todo)")]
     public int sortingOrder = 100;
 
     private const string ID_LORE1       = "LoreLine1";
@@ -36,6 +33,10 @@ public class TutorialController : MonoBehaviour
     private const string ID_LABEL_RIGHT = "LabelJump";
     private const string ID_SIL_LEFT    = "SilhouetteRun";
     private const string ID_SIL_RIGHT   = "SilhouetteJump";
+    private const string ID_LORE3       = "LoreLine3";
+    private const string ID_LORE4       = "LoreLine4";
+    private const string ID_IMG_LEFT    = "LeftButton";
+    private const string ID_IMG_RIGHT   = "RightButton";
     private const string ID_BTN_CONT    = "BtnContinue";
     private const string ID_BTN_NEXT    = "BtnNext";
     private const string ID_BTN_PREV    = "BtnPrevious";
@@ -47,8 +48,9 @@ public class TutorialController : MonoBehaviour
 
     private UIDocument      doc;
     private VisualElement[] dots;
-    private int             paginaActual = 0;
-    private bool            terminado    = false;
+    private int  paginaActual = 0;
+    private bool terminado    = false;
+    private bool registrado   = false;
 
     private PlayerMovement        movimiento;
     private PlayerSoundController sfxPlayer;
@@ -58,6 +60,9 @@ public class TutorialController : MonoBehaviour
     {
         doc = GetComponent<UIDocument>();
         if (doc != null) doc.sortingOrder = sortingOrder;
+        // Pausar en Awake antes de que otros Start() corran
+        Time.timeScale      = 0f;
+        AudioListener.pause = true;
     }
 
     void Start()
@@ -65,29 +70,27 @@ public class TutorialController : MonoBehaviour
         movimiento = FindFirstObjectByType<PlayerMovement>();
         sfxPlayer  = FindFirstObjectByType<PlayerSoundController>();
         audioNivel = FindFirstObjectByType<LevelAudioManager>();
-        IniciarTutorial();
-    }
 
-    void IniciarTutorial()
-    {
-        Time.timeScale = 0f;
         if (movimiento != null) movimiento.estaMuerto = true;
         sfxPlayer?.PausarAudio();
         audioNivel?.PausarAudio();
+        if (MenuMusicManager.Instance != null) MenuMusicManager.Instance.PausarMusica();
+
         if (doc?.rootVisualElement != null)
             doc.rootVisualElement.style.display = DisplayStyle.Flex;
+
         StartCoroutine(RegistrarDelay());
     }
 
     IEnumerator RegistrarDelay()
     {
-        yield return new WaitForSecondsRealtime(0.1f);
+        yield return new WaitForSecondsRealtime(0.05f);
         Registrar();
     }
 
     void Registrar()
     {
-        if (doc?.rootVisualElement == null) return;
+        if (doc?.rootVisualElement == null || registrado) return;
         var root = doc.rootVisualElement;
 
         dots = new VisualElement[4];
@@ -102,8 +105,9 @@ public class TutorialController : MonoBehaviour
         if (btnNext != null) btnNext.RegisterCallback<ClickEvent>(_ => CambiarPagina(+1));
         if (btnPrev != null) btnPrev.RegisterCallback<ClickEvent>(_ => CambiarPagina(-1));
 
-        Debug.Log("[Tutorial] Cont=" + (btnCont != null) + " Next=" + (btnNext != null) + " Prev=" + (btnPrev != null));
+        registrado = true;
         MostrarPagina(0);
+        Debug.Log("[Tutorial] Listo. Paginas=" + pages.Count);
     }
 
     void MostrarPagina(int idx)
@@ -117,14 +121,15 @@ public class TutorialController : MonoBehaviour
         SetLabel(root, ID_LORE2,       p.loreLine2);
         SetLabel(root, ID_LABEL_LEFT,  p.labelLeft);
         SetLabel(root, ID_LABEL_RIGHT, p.labelRight);
+        SetLabel(root, ID_LORE3,       p.loreLine3);
+        SetLabel(root, ID_LORE4,       p.loreLine4);
 
-        if (p.silhouetteLeft != null)
-        { var s = root.Q<VisualElement>(ID_SIL_LEFT);  if (s != null) s.style.backgroundImage = new StyleBackground(p.silhouetteLeft); }
-        if (p.silhouetteRight != null)
-        { var s = root.Q<VisualElement>(ID_SIL_RIGHT); if (s != null) s.style.backgroundImage = new StyleBackground(p.silhouetteRight); }
+        if (p.silhouetteLeft  != null) { var s = root.Q<VisualElement>(ID_SIL_LEFT);  if (s != null) s.style.backgroundImage = new StyleBackground(p.silhouetteLeft);  }
+        if (p.silhouetteRight != null) { var s = root.Q<VisualElement>(ID_SIL_RIGHT); if (s != null) s.style.backgroundImage = new StyleBackground(p.silhouetteRight); }
+        if (p.leftButton     != null) { var s = root.Q<VisualElement>(ID_IMG_LEFT);    if (s != null) s.style.backgroundImage = new StyleBackground(p.leftButton);     }
+        if (p.rightButton    != null) { var s = root.Q<VisualElement>(ID_IMG_RIGHT);   if (s != null) s.style.backgroundImage = new StyleBackground(p.rightButton);    }
 
         ActualizarDots();
-
         var wP = root.Q<VisualElement>(ID_WRAP_PREV);
         var wN = root.Q<VisualElement>(ID_WRAP_NEXT);
         if (wP != null) wP.style.opacity = paginaActual > 0 ? 1f : 0.3f;
@@ -138,8 +143,7 @@ public class TutorialController : MonoBehaviour
         {
             if (dots[i] == null) continue;
             bool a = (i == paginaActual);
-            dots[i].style.width = a ? 16 : 5;
-            dots[i].style.height = 5;
+            dots[i].style.width = a ? 16 : 5; dots[i].style.height = 5;
             float r = a ? 3 : 50;
             dots[i].style.borderTopLeftRadius = dots[i].style.borderTopRightRadius =
             dots[i].style.borderBottomLeftRadius = dots[i].style.borderBottomRightRadius = r;
@@ -157,13 +161,20 @@ public class TutorialController : MonoBehaviour
     {
         if (terminado) return;
         terminado = true;
+
         if (doc?.rootVisualElement != null)
             doc.rootVisualElement.style.display = DisplayStyle.None;
-        Time.timeScale = 1f;
+
+        // Reanudar TODO
+        AudioListener.pause = false;
+        Time.timeScale      = 1f;
+
         if (movimiento != null) movimiento.estaMuerto = false;
         sfxPlayer?.ReanudarAudio();
         audioNivel?.ReanudarAudio();
-        Debug.Log("[Tutorial] Completado.");
+        if (MenuMusicManager.Instance != null) MenuMusicManager.Instance.ReanudarMusica();
+
+        Debug.Log("[Tutorial] Completado — juego reanudado.");
         gameObject.SetActive(false);
     }
 
