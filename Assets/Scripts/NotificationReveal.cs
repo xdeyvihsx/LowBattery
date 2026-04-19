@@ -1,107 +1,113 @@
 using UnityEngine;
 
 // ─────────────────────────────────────────────────────────────────
-// NotificationReveal — Efecto fantasma para notificaciones
+// NotificationReveal — Efecto fantasma + trigger de sonido
 //
-// El sprite empieza invisible (alpha=0) y aparece gradualmente
-// cuando el player entra en el rango de deteccion.
-// Cuando el player se aleja, vuelve a desaparecer.
+// NOTA: Este script NO debe tener NotificationSoundManager adjunto.
+// El NotificationSoundManager vive en su propio GameObject dedicado.
 // ─────────────────────────────────────────────────────────────────
 [RequireComponent(typeof(SpriteRenderer))]
 public class NotificationReveal : MonoBehaviour
 {
-    [Header("Rango de vision")]
-    [Tooltip("Distancia a la que el sprite empieza a aparecer")]
+    [Header("Rango de deteccion")]
     public float rangoDeteccion = 5f;
+    public float rangoVisible   = 2.5f;
+    public float velocidadFade  = 3f;
 
-    [Tooltip("Distancia a la que el sprite llega a ser completamente visible")]
-    public float rangoVisible = 2.5f;
+    [Header("Alpha")]
+    [Range(0f, 0.3f)] public float alphaMinimo = 0f;
+    [Range(0.5f, 1f)] public float alphaMaximo = 1f;
 
-    [Header("Velocidad del fade")]
-    [Tooltip("Que tan rapido aparece y desaparece (mayor = mas rapido)")]
-    public float velocidadFade = 3f;
+    [Header("Sonido de aparicion")]
+    [Tooltip("Whatsapp | Teams | Llamada")]
+    public string tipoNotificacion = NotificationSoundManager.TIPO_WHATSAPP;
 
-    [Header("Alpha minimo cuando no hay player cerca")]
-    [Range(0f, 0.3f)]
-    public float alphaMinimo = 0f;
+    [Header("Umbral de alpha para disparar SFX (0..1)")]
+    [Range(0.05f, 0.5f)] public float umbralSonido = 0.15f;
 
-    [Header("Alpha maximo cuando el player esta cerca")]
-    [Range(0.5f, 1f)]
-    public float alphaMaximo = 1f;
-
-    // Referencias privadas
     private SpriteRenderer sr;
-    private Transform      playerTransform;
-    private float          alphaActual = 0f;
+    private Transform      playerTr;
+    private float          alphaActual     = 0f;
+    private bool           sonidoDisparado = false;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
-        // Empezar completamente invisible
+        // Los colliders deben ser triggers para detectar al player
+        foreach (var col in GetComponents<Collider2D>())
+            col.isTrigger = true;
+
+        // Empezar invisible
         SetAlpha(alphaMinimo);
     }
 
     void Start()
     {
-        // Buscar el player por tag o por componente
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj == null)
-        {
-            // Fallback: buscar por componente PlayerMovement
-            PlayerMovement pm = FindFirstObjectByType<PlayerMovement>();
-            if (pm != null) playerObj = pm.gameObject;
-        }
-
-        if (playerObj != null)
-            playerTransform = playerObj.transform;
+        // Buscar al player por componente (no depende de tags)
+        var pm = FindFirstObjectByType<PlayerMovement>();
+        if (pm != null)
+            playerTr = pm.transform;
         else
-            Debug.LogWarning("[NotificationReveal] No se encontro el Player.");
+            Debug.LogWarning("[NotifReveal] No encontre PlayerMovement en " + gameObject.name);
     }
 
     void Update()
     {
         if (sr == null) return;
 
-        float alphaObjetivo = alphaMinimo;
+        float objetivo = alphaMinimo;
 
-        if (playerTransform != null)
+        if (playerTr != null)
         {
-            float distancia = Vector2.Distance(transform.position, playerTransform.position);
+            float dist = Vector2.Distance(transform.position, playerTr.position);
 
-            if (distancia <= rangoVisible)
+            if (dist <= rangoVisible)
             {
-                // Dentro del rango visible → alpha maximo
-                alphaObjetivo = alphaMaximo;
+                objetivo = alphaMaximo;
             }
-            else if (distancia <= rangoDeteccion)
+            else if (dist <= rangoDeteccion)
             {
-                // En la zona de transicion → interpolar
-                float t = 1f - (distancia - rangoVisible) / (rangoDeteccion - rangoVisible);
-                alphaObjetivo = Mathf.Lerp(alphaMinimo, alphaMaximo, t);
+                float t = 1f - (dist - rangoVisible) / (rangoDeteccion - rangoVisible);
+                objetivo = Mathf.Lerp(alphaMinimo, alphaMaximo, t);
             }
         }
 
-        // Interpolar suavemente hacia el alpha objetivo
-        alphaActual = Mathf.Lerp(alphaActual, alphaObjetivo, Time.deltaTime * velocidadFade);
+        // Interpolacion suave con MoveTowards (mas predecible que Lerp)
+        alphaActual = Mathf.MoveTowards(alphaActual, objetivo, velocidadFade * Time.deltaTime);
         SetAlpha(alphaActual);
+
+        // Disparar SFX solo cuando cruza el umbral por primera vez
+        if (!sonidoDisparado && alphaActual >= umbralSonido)
+        {
+            // Acceder al Singleton directamente
+            NotificationSoundManager nsm = NotificationSoundManager.Instance;
+            if (nsm != null)
+                nsm.PlayNotificacion(tipoNotificacion);
+            else
+                Debug.LogWarning("[NotifReveal] NotificationSoundManager.Instance es null en " + gameObject.name);
+
+            sonidoDisparado = true;
+        }
+
+        // Resetear flag cuando el sprite vuelve a estar completamente oculto
+        if (sonidoDisparado && alphaActual <= alphaMinimo + 0.01f)
+            sonidoDisparado = false;
     }
 
-    void SetAlpha(float alpha)
+    void SetAlpha(float a)
     {
         Color c = sr.color;
-        c.a     = Mathf.Clamp01(alpha);
+        c.a      = Mathf.Clamp01(a);
         sr.color = c;
     }
 
-    // Visualizar el rango en la Scene View
     void OnDrawGizmosSelected()
     {
-        // Rango de deteccion (empieza a aparecer)
-        Gizmos.color = new Color(1f, 1f, 0f, 0.3f);
+        // Circulo amarillo = zona de deteccion (empieza a aparecer)
+        Gizmos.color = new Color(1f, 1f, 0f, 0.25f);
         Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
-
-        // Rango visible (completamente visible)
-        Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
+        // Circulo verde = zona de maxima visibilidad
+        Gizmos.color = new Color(0f, 1f, 0f, 0.4f);
         Gizmos.DrawWireSphere(transform.position, rangoVisible);
     }
 }
