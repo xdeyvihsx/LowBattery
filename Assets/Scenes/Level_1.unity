@@ -2039,8 +2039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 3
-  rangoVisible: 2
+  rangoDeteccion: 3.5
+  rangoVisible: 2.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -3506,8 +3506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 3
-  rangoVisible: 2
+  rangoDeteccion: 3.5
+  rangoVisible: 2.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -8336,8 +8336,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 3
-  rangoVisible: 2
+  rangoDeteccion: 3.5
+  rangoVisible: 2.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -9319,8 +9319,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 3
-  rangoVisible: 2
+  rangoDeteccion: 3.5
+  rangoVisible: 2.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1
@@ -14318,8 +14318,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8e24b78929e4945a08d224fe9bc3d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NotificationReveal
-  rangoDeteccion: 3
-  rangoVisible: 2
+  rangoDeteccion: 3.5
+  rangoVisible: 2.5
   velocidadFade: 3
   alphaMinimo: 0
   alphaMaximo: 1

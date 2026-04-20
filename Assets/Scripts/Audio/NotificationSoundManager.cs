@@ -1,60 +1,60 @@
 using UnityEngine;
 
-// ─────────────────────────────────────────────────────────────────
-// NotificationSoundManager — Singleton dedicado de audio
-//
-// DEBE vivir en UN SOLO GameObject en la escena.
-// NO adjuntar a notificaciones individuales.
-// ─────────────────────────────────────────────────────────────────
+// NotificationSoundManager v3 — fix AudioSource disabled
+// Usa un AudioSource en el propio GameObject en lugar de crear hijos
+// para evitar el bug de "Can not play a disabled audio source"
 public class NotificationSoundManager : MonoBehaviour
 {
     public static NotificationSoundManager Instance { get; private set; }
 
-    [Header("SFX Notificaciones (Assets/SFX/Notifications/)")]
+    [Header("SFX Notificaciones")]
     public AudioClip sfxWhatsapp;
     public AudioClip sfxTeams;
     public AudioClip sfxRingtone;
 
-    [Header("SFX Dano jugador (Assets/SFX/Player/Damage/)")]
+    [Header("SFX Dano jugador")]
     public AudioClip sfxImpacto;
 
     [Header("Volumenes base")]
     [Range(0f,1f)] public float volNotificacion = 0.75f;
-    [Range(0f,1f)] public float volImpacto      = 0.90f;
+    [Range(0f,1f)] public float volImpacto      = 1.0f;
 
-    [Header("Cooldown entre reproducciones (seg)")]
-    public float cooldownNotif   = 1.2f;
-    public float cooldownImpacto = 0.2f;
+    [Header("Cooldown notificaciones (seg)")]
+    public float cooldownNotif = 1.5f;
 
     public const string TIPO_WHATSAPP = "Whatsapp";
     public const string TIPO_TEAMS    = "Teams";
     public const string TIPO_LLAMADA  = "Llamada";
 
-    private AudioSource srcNotif;
-    private AudioSource srcImpacto;
+    // Un unico AudioSource en el propio GO — nunca se deshabilita
+    private AudioSource src;
 
     private float tWhatsapp = 0f;
     private float tTeams    = 0f;
     private float tRing     = 0f;
-    private float tImpacto  = 0f;
 
     void Awake()
     {
-        // Singleton estricto — si ya existe una instancia, destruir esta
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("[NotifSoundMgr] Instancia duplicada detectada en '"
-                + gameObject.name + "' — destruyendo. "
-                + "El NotificationSoundManager debe estar solo en su propio GameObject.");
-            Destroy(this);   // Destruir solo el componente, no el GameObject completo
+            Debug.LogWarning("[NotifSoundMgr] Duplicado eliminado de: " + gameObject.name);
+            Destroy(this);
             return;
         }
-
         Instance = this;
 
-        // Crear AudioSources hijos dedicados
-        srcNotif   = CrearAudioSource("Src_Notificaciones", priority: 64);
-        srcImpacto = CrearAudioSource("Src_ImpactoJugador", priority: 32);
+        // Usar el AudioSource del propio GameObject
+        // Si no existe, agregar uno
+        src = GetComponent<AudioSource>();
+        if (src == null)
+            src = gameObject.AddComponent<AudioSource>();
+
+        src.spatialBlend = 0f;   // 2D — suena igual en toda la pantalla
+        src.playOnAwake  = false;
+        src.loop         = false;
+        src.priority     = 32;
+
+        Debug.Log("[NotifSoundMgr] Listo. src=" + (src != null && src.enabled));
     }
 
     void Update()
@@ -63,80 +63,74 @@ public class NotificationSoundManager : MonoBehaviour
         if (tWhatsapp > 0f) tWhatsapp -= d;
         if (tTeams    > 0f) tTeams    -= d;
         if (tRing     > 0f) tRing     -= d;
-        if (tImpacto  > 0f) tImpacto  -= d;
     }
 
-    // ── API publica ────────────────────────────────────────────
-
+    // ── Sonido de aparicion de notificacion ───────────────────
     public void PlayNotificacion(string tipo)
     {
-        float vol = volNotificacion * SFXVolume();
+        if (!ValidarSource("PlayNotificacion")) return;
+        float vol = volNotificacion * SFXVol();
 
         switch (tipo)
         {
             case TIPO_WHATSAPP:
                 if (tWhatsapp > 0f || sfxWhatsapp == null) return;
-                srcNotif.PlayOneShot(sfxWhatsapp, vol);
+                src.PlayOneShot(sfxWhatsapp, vol);
                 tWhatsapp = cooldownNotif;
                 break;
-
             case TIPO_TEAMS:
                 if (tTeams > 0f || sfxTeams == null) return;
-                srcNotif.PlayOneShot(sfxTeams, vol);
+                src.PlayOneShot(sfxTeams, vol);
                 tTeams = cooldownNotif;
                 break;
-
             case TIPO_LLAMADA:
                 if (tRing > 0f || sfxRingtone == null) return;
-                srcNotif.PlayOneShot(sfxRingtone, vol);
+                src.PlayOneShot(sfxRingtone, vol);
                 tRing = cooldownNotif;
                 break;
-
             default:
-                Debug.LogWarning("[NotifSoundMgr] Tipo desconocido: '" + tipo
-                    + "'. Usa: Whatsapp | Teams | Llamada");
+                Debug.LogWarning("[NotifSoundMgr] Tipo desconocido: " + tipo);
                 break;
         }
     }
 
+    // ── Sonido de impacto al player ────────────────────────────
     public void PlayImpacto()
     {
-        if (tImpacto > 0f || sfxImpacto == null) return;
-        srcImpacto.PlayOneShot(sfxImpacto, volImpacto * SFXVolume());
-        tImpacto = cooldownImpacto;
+        if (!ValidarSource("PlayImpacto")) return;
+        if (sfxImpacto == null)
+        {
+            Debug.LogWarning("[NotifSoundMgr] sfxImpacto no asignado en Inspector.");
+            return;
+        }
+        // Sin cooldown — la notificacion ya desaparece, no puede spamear
+        src.PlayOneShot(sfxImpacto, volImpacto * SFXVol());
+        Debug.Log("[NotifSoundMgr] Impacto reproducido.");
     }
 
-    // ── Helpers internos ───────────────────────────────────────
-
-    AudioSource CrearAudioSource(string nombre, int priority)
+    // ── Validacion robusta del AudioSource ────────────────────
+    bool ValidarSource(string caller)
     {
-        var go            = new GameObject(nombre);
-        go.transform.SetParent(transform);
-        var src           = go.AddComponent<AudioSource>();
-        src.spatialBlend  = 0f;     // 2D — suena igual en toda la pantalla
-        src.priority      = priority;
-        src.playOnAwake   = false;
-        src.loop          = false;
-        src.outputAudioMixerGroup = null;
-        return src;
+        if (src == null)
+        {
+            Debug.LogError("[NotifSoundMgr] AudioSource null en " + caller);
+            return false;
+        }
+        if (!src.enabled)
+        {
+            Debug.LogError("[NotifSoundMgr] AudioSource DISABLED en " + caller
+                + ". Habilitandolo...");
+            src.enabled = true;
+        }
+        if (!gameObject.activeInHierarchy)
+        {
+            Debug.LogError("[NotifSoundMgr] GameObject inactivo en " + caller);
+            return false;
+        }
+        return true;
     }
 
-    // Lee vol_master y vol_sfx de PlayerPrefs (mismo sistema que AudioSettingsData)
-    float SFXVolume()
-    {
-        return PlayerPrefs.GetFloat("vol_master", 1f)
-             * PlayerPrefs.GetFloat("vol_sfx",    0.8f);
-    }
-
-#if UNITY_EDITOR
-    void OnValidate()
-    {
-        // Advertir en Editor si hay multiples instancias en la escena
-        var todos = FindObjectsByType<NotificationSoundManager>(FindObjectsSortMode.None);
-        if (todos.Length > 1)
-            Debug.LogError("[NotifSoundMgr] HAY " + todos.Length
-                + " INSTANCIAS en la escena. Solo debe haber UNA. "
-                + "Quita el componente de las notificaciones individuales.");
-    }
-#endif
+    float SFXVol() =>
+        PlayerPrefs.GetFloat("vol_master", 1f) *
+        PlayerPrefs.GetFloat("vol_sfx",    0.8f);
 }
