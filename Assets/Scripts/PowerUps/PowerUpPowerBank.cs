@@ -9,16 +9,20 @@ public class PowerUpPowerBank : PowerUpBase
     {
         if (PlayerData.Instance == null) return;
 
+        // 1. Recargar bateria
         PlayerData.Instance.RecargarBateria(recargaBateria);
 
-        // Mostrar notificacion en el HUD
-        if (HUDController.Instance != null)
-            HUDController.Instance.MostrarNotifPowerUp(
-                "+" + recargaBateria + "%",
-                new Color(0.2f, 1f, 0.4f, 1f),
-                "Power Bank"
-            );
+        // 2. Cadena de audio: recogida -> subida bateria
+        PowerUpManager.Instance?.PlayPowerUpAudio();
 
-        Debug.Log("[PowerBank] +" + recargaBateria + "% bateria. Total: " + PlayerData.Instance.bateriaActual);
+        // 3. Notificacion en HUD
+        // if (HUDController.Instance != null)
+        //     HUDController.Instance.MostrarNotifPowerUp(
+        //         "+" + recargaBateria + "%",
+        //         new Color(0.2f, 1f, 0.4f, 1f),
+        //         "Power Bank"
+        //     );
+
+        // Debug.Log("[PowerBank] +" + recargaBateria + "% bateria.");
     }
 }

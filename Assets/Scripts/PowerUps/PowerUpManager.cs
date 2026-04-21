@@ -1,98 +1,134 @@
 using UnityEngine;
 using System.Collections;
 
-// ─────────────────────────────────────────────────────────────────
-// PowerUpManager — Gestiona efectos activos de power-ups
-//
-// - Escudo de Modo Avion: bloquea dano de notificaciones
-// - Efecto visual en el player (tinte de color + parpadeo)
-// - Barra de tiempo restante opcional via HUD
-// ─────────────────────────────────────────────────────────────────
 public class PowerUpManager : MonoBehaviour
 {
     public static PowerUpManager Instance { get; private set; }
 
-    // ── Estado del escudo ──────────────────────────────────────
-    public static bool EscudoAvionActivo { get; private set; } = false;
+    public static bool  EscudoAvionActivo    { get; private set; } = false;
     public static float TiempoEscudoRestante { get; private set; } = 0f;
+
+    [Header("SFX Power-Up")]
+    [Tooltip("Short_power-up_sound — suena al recoger")]
+    public AudioClip sfxRecogida;
+
+    [Tooltip("Short_player_power-up_sound — suena al subir bateria")]
+    public AudioClip sfxSubidaBateria;
+
+    [Header("Volumenes")]
+    [Range(0f,1f)] public float volRecogida      = 0.9f;
+    [Range(0f,1f)] public float volSubidaBateria = 0.85f;
 
     private SpriteRenderer playerSR;
     private Color          colorOriginalPlayer;
     private Coroutine      corEscudo;
+    private Coroutine      corAudio;
+    private AudioSource    srcRecogida;
+    private AudioSource    srcSubida;
 
     void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
+        Instance    = this;
+        srcRecogida = Crear("Src_PU_Recogida", 48);
+        srcSubida   = Crear("Src_PU_Subida",   48);
     }
 
     void Start()
     {
-        // Buscar el SpriteRenderer del player para efectos visuales
-        PlayerMovement mov = FindFirstObjectByType<PlayerMovement>();
+        var mov = FindFirstObjectByType<PlayerMovement>();
         if (mov != null)
         {
-            playerSR = mov.GetComponentInChildren<SpriteRenderer>();
-            if (playerSR != null)
-                colorOriginalPlayer = playerSR.color;
+            playerSR = mov.GetComponentInChildren<SpriteRenderer>(true);
+            if (playerSR != null) colorOriginalPlayer = playerSR.color;
         }
     }
 
-    // ── API publica ────────────────────────────────────────────
+    // Llamado por PowerUpPowerBank y PowerUpModoAvion al recoger
+    public void PlayPowerUpAudio()
+    {
+        if (corAudio != null) StopCoroutine(corAudio);
+        corAudio = StartCoroutine(CorCadena());
+    }
+
+    IEnumerator CorCadena()
+    {
+        float vol = SFXVol();
+
+        // Paso 1: sonido de recogida del power-up
+        if (sfxRecogida != null && srcRecogida != null)
+        {
+            srcRecogida.PlayOneShot(sfxRecogida, volRecogida * vol);
+            // Esperar la duracion exacta del clip con tiempo real (ignora timeScale)
+            yield return new WaitForSecondsRealtime(sfxRecogida.length);
+        }
+        else
+            Debug.LogWarning("[PowerUpMgr] sfxRecogida no asignado.");
+
+        // Paso 2: sonido de subida de bateria
+        if (sfxSubidaBateria != null && srcSubida != null)
+            srcSubida.PlayOneShot(sfxSubidaBateria, volSubidaBateria * vol);
+        else
+            Debug.LogWarning("[PowerUpMgr] sfxSubidaBateria no asignado.");
+
+        corAudio = null;
+    }
 
     public void ActivarEscudoAvion(float duracion, Color colorTinte)
     {
-        // Cancelar escudo anterior si habia uno activo
         if (corEscudo != null) StopCoroutine(corEscudo);
-        corEscudo = StartCoroutine(CoroutineEscudo(duracion, colorTinte));
-        Debug.Log("[PowerUpManager] Escudo Modo Avion activado: " + duracion + " seg");
+        corEscudo = StartCoroutine(CorEscudo(duracion, colorTinte));
     }
 
-    IEnumerator CoroutineEscudo(float duracion, Color colorTinte)
+    IEnumerator CorEscudo(float duracion, Color colorTinte)
     {
         EscudoAvionActivo    = true;
         TiempoEscudoRestante = duracion;
+        if (playerSR != null) playerSR.color = colorTinte;
 
-        // Aplicar tinte azul al player
-        if (playerSR != null)
-            playerSR.color = colorTinte;
-
-        float tiempoTranscurrido = 0f;
-
-        while (tiempoTranscurrido < duracion)
+        float t = 0f;
+        while (t < duracion)
         {
-            tiempoTranscurrido   += Time.deltaTime;
-            TiempoEscudoRestante  = duracion - tiempoTranscurrido;
-
-            // En los ultimos 0.8 segundos hacer parpadeo de aviso
+            t                    += Time.deltaTime;
+            TiempoEscudoRestante  = duracion - t;
             if (TiempoEscudoRestante <= 0.8f && playerSR != null)
             {
-                float parpadeo = Mathf.PingPong(Time.time * 8f, 1f);
-                Color c = colorTinte;
-                c.a = Mathf.Lerp(0.3f, 1f, parpadeo);
+                float p = Mathf.PingPong(Time.time * 8f, 1f);
+                Color c = colorTinte; c.a = Mathf.Lerp(0.3f, 1f, p);
                 playerSR.color = c;
             }
-
             yield return null;
         }
 
-        // Desactivar escudo
-        EscudoAvionActivo    = false;
-        TiempoEscudoRestante = 0f;
-
-        // Restaurar color original del player
-        if (playerSR != null)
-            playerSR.color = colorOriginalPlayer;
-
-        Debug.Log("[PowerUpManager] Escudo Modo Avion desactivado.");
-    }
-
-    // Llamado cuando el player muere para limpiar efectos activos
-    public void LimpiarEfectos()
-    {
-        if (corEscudo != null) StopCoroutine(corEscudo);
         EscudoAvionActivo    = false;
         TiempoEscudoRestante = 0f;
         if (playerSR != null) playerSR.color = colorOriginalPlayer;
+        Debug.Log("[PowerUpMgr] Escudo desactivado.");
     }
+
+    public void LimpiarEfectos()
+    {
+        if (corEscudo != null) StopCoroutine(corEscudo);
+        if (corAudio  != null) StopCoroutine(corAudio);
+        EscudoAvionActivo    = false;
+        TiempoEscudoRestante = 0f;
+        corAudio             = null;
+        if (playerSR    != null) playerSR.color = colorOriginalPlayer;
+        if (srcRecogida != null) srcRecogida.Stop();
+        if (srcSubida   != null) srcSubida.Stop();
+    }
+
+    AudioSource Crear(string nombre, int priority)
+    {
+        var go = new GameObject(nombre);
+        go.transform.SetParent(transform);
+        var s = go.AddComponent<AudioSource>();
+        s.spatialBlend = 0f; s.priority = priority;
+        s.playOnAwake = false; s.loop = false;
+        return s;
+    }
+
+    float SFXVol() =>
+        PlayerPrefs.GetFloat("vol_master", 1f) *
+        PlayerPrefs.GetFloat("vol_sfx", 0.8f);
 }
