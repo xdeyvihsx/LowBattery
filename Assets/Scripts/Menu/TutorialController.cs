@@ -7,34 +7,47 @@ using System.Collections.Generic;
 [System.Serializable]
 public class TutorialPage
 {
+    [Header("Texto narrativo (vacio = oculto en juego)")]
     public string loreLine1 = "";
     public string loreLine2 = "";
-    public string labelLeft  = "";
-    public string labelRight = "";
-    public Sprite silhouetteLeft;
-    public Sprite silhouetteRight;
-    public string inputLeft  = "";
-    public string inputRight = "";
     public string loreLine3 = "";
     public string loreLine4 = "";
-    public Sprite leftButton;
-    public Sprite rightButton;
+
+    [Header("Etiquetas de paneles (vacio = oculto en juego)")]
+    public string labelLeft  = "";
+    public string labelRight = "";
+
+    [Header("Silhouettes (null = oculto en juego)")]
+    public Sprite silhouetteLeft;
+    public Sprite silhouetteRight;
+
+    [Header("Imagenes de input (null = oculto en juego)")]
+    public Sprite imageLeft;
+    public Sprite imageRight;
+
+    [Header("Hints de input (vacio = oculto en juego)")]
+    public string inputLeft  = "";
+    public string inputRight = "";
 }
 
 [RequireComponent(typeof(UIDocument))]
 public class TutorialController : MonoBehaviour
 {
+    [Header("Paginas del tutorial (configura en Inspector)")]
     [SerializeField] private List<TutorialPage> pages = new List<TutorialPage>();
+
+    [Header("Sorting Order (encima de todo)")]
     public int sortingOrder = 100;
 
+    // IDs exactos del TutorialUI.uxml — NO MODIFICAR
     private const string ID_LORE1       = "LoreLine1";
     private const string ID_LORE2       = "LoreLine2";
+    private const string ID_LORE3       = "LoreLine3";
+    private const string ID_LORE4       = "LoreLine4";
     private const string ID_LABEL_LEFT  = "LabelRun";
     private const string ID_LABEL_RIGHT = "LabelJump";
     private const string ID_SIL_LEFT    = "SilhouetteRun";
     private const string ID_SIL_RIGHT   = "SilhouetteJump";
-    private const string ID_LORE3       = "LoreLine3";
-    private const string ID_LORE4       = "LoreLine4";
     private const string ID_IMG_LEFT    = "LeftButton";
     private const string ID_IMG_RIGHT   = "RightButton";
     private const string ID_BTN_CONT    = "BtnContinue";
@@ -60,7 +73,6 @@ public class TutorialController : MonoBehaviour
     {
         doc = GetComponent<UIDocument>();
         if (doc != null) doc.sortingOrder = sortingOrder;
-        // Pausar en Awake antes de que otros Start() corran
         Time.timeScale      = 0f;
         AudioListener.pause = true;
     }
@@ -107,7 +119,10 @@ public class TutorialController : MonoBehaviour
 
         registrado = true;
         MostrarPagina(0);
-        Debug.Log("[Tutorial] Listo. Paginas=" + pages.Count);
+
+        Debug.Log("[Tutorial] Registrado. Cont=" + (btnCont != null)
+            + " Next=" + (btnNext != null) + " Prev=" + (btnPrev != null)
+            + " | Paginas=" + pages.Count);
     }
 
     void MostrarPagina(int idx)
@@ -117,23 +132,52 @@ public class TutorialController : MonoBehaviour
         var root = doc.rootVisualElement;
         var p    = pages[paginaActual];
 
-        SetLabel(root, ID_LORE1,       p.loreLine1);
-        SetLabel(root, ID_LORE2,       p.loreLine2);
-        SetLabel(root, ID_LABEL_LEFT,  p.labelLeft);
-        SetLabel(root, ID_LABEL_RIGHT, p.labelRight);
-        SetLabel(root, ID_LORE3,       p.loreLine3);
-        SetLabel(root, ID_LORE4,       p.loreLine4);
+        // Textos: ocultos en runtime si vacios — Inspector intacto
+        SetLabelVisible(root, ID_LORE1,       p.loreLine1);
+        SetLabelVisible(root, ID_LORE2,       p.loreLine2);
+        SetLabelVisible(root, ID_LORE3,       p.loreLine3);
+        SetLabelVisible(root, ID_LORE4,       p.loreLine4);
+        SetLabelVisible(root, ID_LABEL_LEFT,  p.labelLeft);
+        SetLabelVisible(root, ID_LABEL_RIGHT, p.labelRight);
 
-        if (p.silhouetteLeft  != null) { var s = root.Q<VisualElement>(ID_SIL_LEFT);  if (s != null) s.style.backgroundImage = new StyleBackground(p.silhouetteLeft);  }
-        if (p.silhouetteRight != null) { var s = root.Q<VisualElement>(ID_SIL_RIGHT); if (s != null) s.style.backgroundImage = new StyleBackground(p.silhouetteRight); }
-        if (p.leftButton     != null) { var s = root.Q<VisualElement>(ID_IMG_LEFT);    if (s != null) s.style.backgroundImage = new StyleBackground(p.leftButton);     }
-        if (p.rightButton    != null) { var s = root.Q<VisualElement>(ID_IMG_RIGHT);   if (s != null) s.style.backgroundImage = new StyleBackground(p.rightButton);    }
+        // Sprites: ocultos en runtime si null — Inspector intacto
+        SetSpriteVisible(root, ID_SIL_LEFT,  p.silhouetteLeft);
+        SetSpriteVisible(root, ID_SIL_RIGHT, p.silhouetteRight);
+        SetSpriteVisible(root, ID_IMG_LEFT,  p.imageLeft);
+        SetSpriteVisible(root, ID_IMG_RIGHT, p.imageRight);
 
         ActualizarDots();
+
         var wP = root.Q<VisualElement>(ID_WRAP_PREV);
         var wN = root.Q<VisualElement>(ID_WRAP_NEXT);
         if (wP != null) wP.style.opacity = paginaActual > 0 ? 1f : 0.3f;
         if (wN != null) wN.style.opacity = paginaActual < pages.Count - 1 ? 1f : 0.3f;
+    }
+
+    // Oculta el Label en juego si texto vacio — Inspector NO se modifica
+    void SetLabelVisible(VisualElement root, string id, string texto)
+    {
+        var l = root.Q<Label>(id);
+        if (l == null) return;
+        bool tiene = !string.IsNullOrWhiteSpace(texto);
+        l.style.display = tiene ? DisplayStyle.Flex : DisplayStyle.None;
+        if (tiene) l.text = texto;
+    }
+
+    // Oculta el VisualElement en juego si sprite null — Inspector NO se modifica
+    void SetSpriteVisible(VisualElement root, string id, Sprite sprite)
+    {
+        var el = root.Q<VisualElement>(id);
+        if (el == null) return;
+        if (sprite != null)
+        {
+            el.style.display         = DisplayStyle.Flex;
+            el.style.backgroundImage = new StyleBackground(sprite);
+        }
+        else
+        {
+            el.style.display = DisplayStyle.None;
+        }
     }
 
     void ActualizarDots()
@@ -142,11 +186,16 @@ public class TutorialController : MonoBehaviour
         for (int i = 0; i < dots.Length; i++)
         {
             if (dots[i] == null) continue;
+            if (i >= pages.Count) { dots[i].style.display = DisplayStyle.None; continue; }
+            dots[i].style.display = DisplayStyle.Flex;
             bool a = (i == paginaActual);
-            dots[i].style.width = a ? 16 : 5; dots[i].style.height = 5;
+            dots[i].style.width  = a ? 16 : 5;
+            dots[i].style.height = 5;
             float r = a ? 3 : 50;
-            dots[i].style.borderTopLeftRadius = dots[i].style.borderTopRightRadius =
-            dots[i].style.borderBottomLeftRadius = dots[i].style.borderBottomRightRadius = r;
+            dots[i].style.borderTopLeftRadius     = r;
+            dots[i].style.borderTopRightRadius    = r;
+            dots[i].style.borderBottomLeftRadius  = r;
+            dots[i].style.borderBottomRightRadius = r;
             dots[i].style.backgroundColor = new StyleColor(a ? DOT_ACT : DOT_INAC);
         }
     }
@@ -161,38 +210,37 @@ public class TutorialController : MonoBehaviour
     {
         if (terminado) return;
         terminado = true;
-
         if (doc?.rootVisualElement != null)
             doc.rootVisualElement.style.display = DisplayStyle.None;
-
-        // Reanudar TODO
         AudioListener.pause = false;
         Time.timeScale      = 1f;
-
         if (movimiento != null) movimiento.estaMuerto = false;
         sfxPlayer?.ReanudarAudio();
         audioNivel?.ReanudarAudio();
         if (MenuMusicManager.Instance != null) MenuMusicManager.Instance.ReanudarMusica();
-
-        Debug.Log("[Tutorial] Completado — juego reanudado.");
+        Debug.Log("[Tutorial] Completado.");
         gameObject.SetActive(false);
     }
 
     void Update()
     {
         if (terminado || Keyboard.current == null) return;
-        if (Keyboard.current.rightArrowKey.wasPressedThisFrame || Keyboard.current.dKey.wasPressedThisFrame) CambiarPagina(+1);
-        if (Keyboard.current.leftArrowKey.wasPressedThisFrame  || Keyboard.current.aKey.wasPressedThisFrame) CambiarPagina(-1);
+        if (Keyboard.current.rightArrowKey.wasPressedThisFrame ||
+            Keyboard.current.dKey.wasPressedThisFrame) CambiarPagina(+1);
+        if (Keyboard.current.leftArrowKey.wasPressedThisFrame ||
+            Keyboard.current.aKey.wasPressedThisFrame) CambiarPagina(-1);
         if (Keyboard.current.enterKey.wasPressedThisFrame) Continuar();
     }
-
-    void SetLabel(VisualElement root, string id, string texto)
-    { var l = root.Q<Label>(id); if (l != null) l.text = texto; }
 
     Button BuscarBtn(VisualElement root, params string[] ids)
     {
         foreach (var id in ids) { var b = root.Q<Button>(id); if (b != null) return b; }
-        foreach (var id in ids) { var b = root.Query<Button>().Where(x => (x.name ?? "").ToLower().Contains(id.ToLower())).First(); if (b != null) return b; }
+        foreach (var id in ids)
+        {
+            var b = root.Query<Button>().Where(x =>
+                (x.name ?? "").ToLower().Contains(id.ToLower())).First();
+            if (b != null) return b;
+        }
         return null;
     }
 }

@@ -16,10 +16,9 @@ public abstract class PowerUpBase : MonoBehaviour
     [Header("Efecto al recoger")]
     public float duracionEfectoRecogida = 0.35f;
 
-    // Estado original guardado al inicio
     private Vector3 posicionOriginal;
     private Vector3 escalaOriginal;
-    private Vector3 posicionBase;   // posicion que usa la animacion flotante
+    private Vector3 posicionBase;
 
     protected SpriteRenderer sr;
     private   bool            recogido = false;
@@ -33,17 +32,12 @@ public abstract class PowerUpBase : MonoBehaviour
 
     void Start()
     {
-        // Guardar estado original
         posicionOriginal  = transform.position;
         escalaOriginal    = transform.localScale;
         posicionBase      = posicionOriginal;
 
-        // Suscribirse al evento OnRespawn del PlayerDeath
         PlayerDeath pd = FindFirstObjectByType<PlayerDeath>();
-        if (pd != null)
-            pd.OnRespawn += Reiniciar;
-        else
-            Debug.LogWarning("[PowerUpBase] No encontre PlayerDeath para suscribirse.");
+        if (pd != null) pd.OnRespawn += Reiniciar;
     }
 
     void OnDestroy()
@@ -55,13 +49,9 @@ public abstract class PowerUpBase : MonoBehaviour
     void Update()
     {
         if (recogido) return;
-
-        // Animacion flotante
         float y = Mathf.Sin(Time.time * velocidadFlotacion) * amplitudFlotacion;
         transform.position = new Vector3(posicionBase.x, posicionBase.y + y, posicionBase.z);
-
-        if (rotarSprite)
-            transform.Rotate(0f, 0f, velocidadGiro * Time.deltaTime);
+        if (rotarSprite) transform.Rotate(0f, 0f, velocidadGiro * Time.deltaTime);
     }
 
     void OnTriggerEnter2D(Collider2D otro)
@@ -69,7 +59,17 @@ public abstract class PowerUpBase : MonoBehaviour
         if (recogido) return;
         if (otro.gameObject.layer != LayerMask.NameToLayer("Player")) return;
         recogido = true;
+
+        // 1. Logica especifica del power-up (recarga bateria, escudo, etc.)
         AlRecoger();
+
+        // 2. Sonido secuencial: recogida → subida de bateria
+        if (PowerUpAudioManager.Instance != null)
+            PowerUpAudioManager.Instance.PlaySecuencia();
+        else
+            Debug.LogWarning("[PowerUpBase] PowerUpAudioManager.Instance es null en " + gameObject.name);
+
+        // 3. Efecto visual pop + fade
         StartCoroutine(EfectoYOcultar());
     }
 
@@ -90,28 +90,17 @@ public abstract class PowerUpBase : MonoBehaviour
             yield return null;
         }
 
-        // Ocultar SIN destruir — se reactiva en Reiniciar()
         gameObject.SetActive(false);
     }
 
-    // ── Se llama desde PlayerDeath.OnRespawn ──────────────────
     void Reiniciar()
     {
         recogido             = false;
         transform.position   = posicionOriginal;
         transform.localScale = escalaOriginal;
         posicionBase         = posicionOriginal;
-
-        // Restaurar alpha del sprite
-        if (sr != null)
-        {
-            Color c = sr.color;
-            c.a      = 1f;
-            sr.color = c;
-        }
-
+        if (sr != null) { Color c = sr.color; c.a = 1f; sr.color = c; }
         gameObject.SetActive(true);
-        Debug.Log("[PowerUp] Reiniciado: " + gameObject.name);
     }
 
     protected abstract void AlRecoger();
