@@ -10,7 +10,7 @@ public class InGameOptionsController : MonoBehaviour
     public UIDocument docAudio;
     public UIDocument docVideo;
 
-    private const string ID_ROW_GAME  = "GameRow";
+    // IDs del OptionsUI.uxml — GameRow no existe en este UXML, solo Audio y Video
     private const string ID_ROW_AUDIO = "AudioRow";
     private const string ID_ROW_VIDEO = "VideoRow";
     private const string ID_BACK      = "BackBtn";
@@ -51,22 +51,18 @@ public class InGameOptionsController : MonoBehaviour
         panelActivo = null;
     }
 
-    // Llamado por AudioOptionsController.onBack
     public void CerrarPanelAudio()
     {
         Ocultar(docAudio);
         panelActivo = null;
-        // Volver a mostrar OptionsInGame
         if (doc?.rootVisualElement != null)
             doc.rootVisualElement.style.display = DisplayStyle.Flex;
     }
 
-    // Llamado por VideoOptionsController.onBack
     public void CerrarPanelVideo()
     {
         Ocultar(docVideo);
         panelActivo = null;
-        // Volver a mostrar OptionsInGame
         if (doc?.rootVisualElement != null)
             doc.rootVisualElement.style.display = DisplayStyle.Flex;
     }
@@ -75,12 +71,11 @@ public class InGameOptionsController : MonoBehaviour
     {
         if (doc?.rootVisualElement == null) return;
         if (registrado) return;
-
         var root = doc.rootVisualElement;
         rows.Clear();
         fades.Clear();
 
-        BindRow(root, ID_ROW_GAME,  () => Debug.Log("[InGameOpts] Game"));
+        // Solo Audio y Video — GameRow no existe en OptionsUI.uxml
         BindRow(root, ID_ROW_AUDIO, () => AbrirPanel(docAudio));
         BindRow(root, ID_ROW_VIDEO, () => AbrirPanel(docVideo));
 
@@ -97,33 +92,27 @@ public class InGameOptionsController : MonoBehaviour
                 pauseCtrl?.CerrarOptions();
             });
         }
-
         registrado = true;
     }
 
     void AbrirPanel(UIDocument panel)
     {
         if (panel == null) return;
-
-        // Ocultar OptionsInGame, mostrar el panel hijo
         if (doc?.rootVisualElement != null)
             doc.rootVisualElement.style.display = DisplayStyle.None;
-
         if (panelActivo != null && panelActivo != panel) Ocultar(panelActivo);
         panelActivo = panel;
 
-        // Asignar el callback onBack al panel hijo ANTES de mostrarlo
+        // Asignar callback de Back antes de mostrar
         if (panel == docAudio)
         {
             var audioCtrl = panel.GetComponent<AudioOptionsController>();
-            if (audioCtrl != null)
-                audioCtrl.onBack = CerrarPanelAudio;
+            if (audioCtrl != null) audioCtrl.onBack = CerrarPanelAudio;
         }
         else if (panel == docVideo)
         {
             var videoCtrl = panel.GetComponent<VideoOptionsController>();
-            if (videoCtrl != null)
-                videoCtrl.onBack = CerrarPanelVideo;
+            if (videoCtrl != null) videoCtrl.onBack = CerrarPanelVideo;
         }
 
         if (panel.rootVisualElement != null)
@@ -135,9 +124,10 @@ public class InGameOptionsController : MonoBehaviour
     void BindRow(VisualElement root, string id, System.Action accion)
     {
         var row = root.Q<VisualElement>(id);
-        if (row == null) { Debug.LogWarning("[InGameOpts] No encontre: " + id); return; }
+        if (row == null) return; // Silencioso — no todos los UXMLs tienen todos los rows
         rows.Add(row);
-        row.RegisterCallback<MouseEnterEvent>(_ => { foreach (var r in rows) if (r != row) Fade(r, 0f); Fade(row, 1f); });
+        row.RegisterCallback<MouseEnterEvent>(_ =>
+        { foreach (var r in rows) if (r != row) Fade(r, 0f); Fade(row, 1f); });
         row.RegisterCallback<MouseLeaveEvent>(_ => Fade(row, 0f));
         row.RegisterCallback<ClickEvent>(_ => accion?.Invoke());
     }
