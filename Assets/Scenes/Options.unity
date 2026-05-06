@@ -190,7 +190,9 @@ MonoBehaviour:
   docOpciones: {fileID: 131885741}
   docAudio: {fileID: 478834209}
   docVideo: {fileID: 2063115527}
+  docTutorial: {fileID: 941349560}
   escenaMenu: Menu
+  velocidadFade: 0.18
 --- !u!1 &478834208
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +262,159 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioOptionsController
   audioData: {fileID: 11400000, guid: 7edaf19698e9bbb45b4aa7f0af654dcd, type: 2}
+  idSliderMaster: SliderMaster
+  idSliderMusic: SliderMusic
+  idSliderSFX: SliderSound
+  idBtnReset: BtnResetDefaults
+  idBtnBack: BtnBack
+  idLabelMaster: MasterValue
+  idLabelMusic: MusicValue
+  idLabelSFX: SFXValue
+--- !u!1 &941349559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 941349562}
+  - component: {fileID: 941349560}
+  - component: {fileID: 941349561}
+  m_Layer: 5
+  m_Name: UITutorialController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &941349560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941349559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 56ed2071beb61b74296ef41035b8157e, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: d39c1b19cb93bba4fa001384f3f44a78, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 1
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!114 &941349561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941349559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef1ffb9e8c0554428bbc8af051d6c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialOptionsController
+  pages:
+  - loreLine1: Higher beings, these words are for you alone.
+    loreLine2: The phone runs automatically; Press SPACE to jump; Time it carefully
+      to avoid dangers.
+    loreLine3: To jump
+    loreLine4: Or you can also use Left Click to jump
+    labelLeft: RUN
+    labelRight: JUMP
+    silhouetteLeft: {fileID: -2274363484027164459, guid: 6d915a156a2379e4781641652742be33, type: 3}
+    silhouetteRight: {fileID: -5089799229287275800, guid: 8017a0a841443464ebecc663a0e458b8, type: 3}
+    imageLeft: {fileID: -5858099061022299432, guid: d6b24f03ade741948923c80f4c388e4f, type: 3}
+    imageRight: {fileID: -6251650479528684544, guid: 48bf83f0a8c1108479bc929add2764c7, type: 3}
+    inputLeft: SPACE
+    inputRight: Left Click
+  - loreLine1: You can jump over the boxes and walk on them.
+    loreLine2: But if you touch them from the side, you lose.
+    loreLine3: Jump to survive.
+    loreLine4: Touching hazards = damage or defeat.
+    labelLeft: Walk on the summit
+    labelRight: But watch out!
+    silhouetteLeft: {fileID: -364910264298103508, guid: 10759cbc0889ab64aa1ecaa4332521fb, type: 3}
+    silhouetteRight: {fileID: -7722736440016689869, guid: 225b6a25366f9824db073ab45b61aef7, type: 3}
+    imageLeft: {fileID: 0}
+    imageRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+  - loreLine1: "Not everything that looks harmless\u2026 is safe."
+    loreLine2: Objects on the floor (such as papers) should be avoided by jumping
+      over them.
+    loreLine3: Jump to survive.
+    loreLine4: Touching hazards = damage or defeat.
+    labelLeft: CAREFUL
+    labelRight: JUMP
+    silhouetteLeft: {fileID: 1471698999076470864, guid: 6d18edd99f15f974cb371696091832ff, type: 3}
+    silhouetteRight: {fileID: -8418272870477287439, guid: aa6ff0474fd2ba146bd9c70df62a308e, type: 3}
+    imageLeft: {fileID: 0}
+    imageRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+  - loreLine1: Notifications are your worst enemy.
+    loreLine2: They appear suddenly in the path; there's always a sound beforehand
+      to alert you.
+    loreLine3: Listen, React, Survive.
+    loreLine4: 
+    labelLeft: SOUNDS
+    labelRight: RAPID REACTION
+    silhouetteLeft: {fileID: -7792694739532830327, guid: c959ac05b2efb2642930c3b6e0d730ea, type: 3}
+    silhouetteRight: {fileID: -49578503611327746, guid: 0921f076e03a69b49979c1621979d602, type: 3}
+    imageLeft: {fileID: 0}
+    imageRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+  - loreLine1: You start with 15% battery
+    loreLine2: "The battery decreases over time and when damaged. If it reaches 0%
+      \u2192 Game Over"
+    loreLine3: Reach the charger before it's too late.
+    loreLine4: 
+    labelLeft: YOUR LIFE...
+    labelRight: IS YOUR BATTERY
+    silhouetteLeft: {fileID: -2585399260873951142, guid: 448e8441f10a55947bd35ec0e73e8547, type: 3}
+    silhouetteRight: {fileID: -7045605488209839479, guid: 3781be107bf5c3a4d8340d978a9d3f3d, type: 3}
+    imageLeft: {fileID: 0}
+    imageRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+  - loreLine1: Collect power-ups to recharge battery
+    loreLine2: Some offer temporary protection, others reduce consumption
+    loreLine3: Use them wisely.
+    loreLine4: 
+    labelLeft: AIRPLANE MODE
+    labelRight: POWER BANK
+    silhouetteLeft: {fileID: -4920064529860378488, guid: 564a434895410934d9d03d202a62e5d1, type: 3}
+    silhouetteRight: {fileID: -8532313275666720135, guid: ab234840850a5834096f10a5cf246bb2, type: 3}
+    imageLeft: {fileID: 0}
+    imageRight: {fileID: 0}
+    inputLeft: 
+    inputRight: 
+--- !u!4 &941349562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941349559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1125378149
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +448,9 @@ MonoBehaviour:
   docOpciones: {fileID: 131885741}
   docAudio: {fileID: 478834209}
   docVideo: {fileID: 2063115527}
+  docTutorial: {fileID: 941349560}
   escenaMenu: Menu
+  velocidadFade: 0.18
 --- !u!114 &1125378151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,4 +657,5 @@ SceneRoots:
   - {fileID: 131885742}
   - {fileID: 478834210}
   - {fileID: 2063115528}
+  - {fileID: 941349562}
   - {fileID: 1125378152}

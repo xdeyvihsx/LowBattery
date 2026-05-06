@@ -10,6 +10,7 @@ public class OptionsController : MonoBehaviour
     public UIDocument docOpciones;
     public UIDocument docAudio;
     public UIDocument docVideo;
+    public UIDocument docTutorial;
 
     [Header("Escenas")]
     public string escenaMenu = "Menu";
@@ -17,9 +18,9 @@ public class OptionsController : MonoBehaviour
     [Header("Velocidad fade iconos en segundos")]
     public float velocidadFade = 0.18f;
 
-    private const string ID_ROW_GAME  = "GameRow";
     private const string ID_ROW_AUDIO = "AudioRow";
     private const string ID_ROW_VIDEO = "VideoRow";
+    private const string ID_ROW_TUTORIAL = "TutorialRow";
     private const string ID_BACK      = "BackBtn";
     private const string ID_ICON_L    = "StartIconLeft";
     private const string ID_ICON_R    = "StartIconRight";
@@ -32,6 +33,7 @@ public class OptionsController : MonoBehaviour
     {
         OcultarPanel(docAudio);
         OcultarPanel(docVideo);
+        OcultarPanel(docTutorial);
 
         if (docOpciones == null) docOpciones = GetComponent<UIDocument>();
         if (docOpciones == null) { Debug.LogError("[Options] Falta docOpciones."); return; }
@@ -42,9 +44,9 @@ public class OptionsController : MonoBehaviour
         rows.Clear();
         fades.Clear();
 
-        BindRow(root, ID_ROW_GAME,  () => Debug.Log("[Options] Game"));
         BindRow(root, ID_ROW_AUDIO, () => AbrirPanel(docAudio));
         BindRow(root, ID_ROW_VIDEO, () => AbrirPanel(docVideo));
+        BindRow(root, ID_ROW_TUTORIAL, () => AbrirPanel(docTutorial));
 
         var btnBack = root.Q<VisualElement>(ID_BACK);
         if (btnBack != null)
@@ -85,6 +87,12 @@ public class OptionsController : MonoBehaviour
             var videoCtrl = panel.GetComponent<VideoOptionsController>();
             if (videoCtrl != null)
                 videoCtrl.onBack = CerrarPanelActivo;
+        }
+        else if (panel == docTutorial)
+        {
+            var tutorialCtrl = panel.GetComponent<TutorialOptionsController>();
+            if (tutorialCtrl != null)
+                tutorialCtrl.onBack = CerrarPanelActivo;
         }
 
         panel.gameObject.SetActive(true);

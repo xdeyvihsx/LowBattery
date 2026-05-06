@@ -1,0 +1,49 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="TutorialRoot" style="flex-grow: 1; background-color: rgb(0, 0, 0); flex-direction: column;">
+        <ui:VisualElement name="LoreBlock" style="align-items: center; padding: 22px 80px 0; margin-bottom: 8px;">
+            <ui:Label name="LoreLine1" text="" style="color: rgba(255, 255, 255, 0.5); font-size: 30px; font-style: italic; letter-spacing: 0.5px; -unity-text-align: middle-center; margin-bottom: 6px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+            <ui:Label name="LoreLine2" text="" style="color: rgba(255, 255, 255, 0.32); font-size: 30px; font-style: italic; letter-spacing: 0.3px; -unity-text-align: middle-center; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="SilhouettePanels" style="flex-direction: row; flex-grow: 1; min-height: 320px;">
+            <ui:VisualElement name="PanelLeft" style="flex: 1; align-items: center; justify-content: center; border-right-width: 1px; border-right-color: rgba(255, 255, 255, 0.12); padding: 32px;">
+                <ui:Label name="LabelRun" text="RUN" style="color: rgba(255, 255, 255, 0.42); font-size: 28px; letter-spacing: 4px; -unity-text-align: middle-center; margin-bottom: 12px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;); height: 38px; width: 282px;"/>
+                <ui:VisualElement name="SilhouetteRun" style="width: 284px; height: 268px; background-image: url(&quot;project://database/Assets/Sprites/Player/Run/Run.png?fileID=-2274363484027164459&amp;guid=6d915a156a2379e4781641652742be33&amp;type=3#Run_1&quot;); -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(255, 255, 255);"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="PanelRight" style="flex: 1; align-items: center; justify-content: center; padding: 32px;">
+                <ui:Label name="LabelJump" text="JUMP" style="color: rgba(255, 255, 255, 0.42); font-size: 28px; letter-spacing: 4px; -unity-text-align: middle-center; margin-bottom: 12px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+                <ui:VisualElement name="SilhouetteJump" style="width: 284px; height: 268px; background-image: url(&quot;project://database/Assets/Sprites/Player/Jump/Jump.png?fileID=-5089799229287275800&amp;guid=8017a0a841443464ebecc663a0e458b8&amp;type=3#Jump_21&quot;); -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(255, 255, 255);"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="InputHints" style="align-items: center; justify-content: center; padding: 8px 40px 12px; flex-direction: row; flex-wrap: wrap; gap: 8px; -unity-background-image-tint-color: rgb(255, 255, 255); -unity-font-definition: url(&quot;project://database/Packages/com.unity.cinemachine/Runtime/Debug/CinemachineRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=df9aec944f4474a04847b6d6375e4138&amp;type=3#NotInter-Regular&quot;);">
+            <ui:VisualElement name="LeftButton" style="width: 102px; height: 44px; background-image: none; -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(255, 255, 255); margin-right: 10px;"/>
+            <ui:Label text="" name="LoreLine3" style="color: rgba(255, 255, 255, 0.7); font-size: 25px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+            <ui:Label text="" style="color: rgba(255, 255, 255, 0.3); font-size: 40px; width: 54px; -unity-text-align: upper-center;"/>
+            <ui:VisualElement name="RightButton" style="width: 41px; height: 44px; background-image: none; -unity-background-scale-mode: scale-to-fit; -unity-background-image-tint-color: rgb(255, 255, 255); margin-right: 10px;"/>
+            <ui:Label text="" name="LoreLine4" style="color: rgba(255, 255, 255, 0.7); font-size: 25px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomSeparator" style="height: 1px; background-color: rgba(255, 255, 255, 0.15);"/>
+        <ui:VisualElement name="NavBar" style="flex-direction: row; align-items: center; padding: 14px 40px; background-color: rgb(0, 0, 0);">
+            <ui:VisualElement name="PageDots" style="flex-direction: row; gap: 6px; align-items: center; flex-grow: 1;">
+                <ui:VisualElement name="Dot1" style="width: 44px; height: 16px; border-radius: 3px; background-color: rgba(255, 255, 255, 0.85);"/>
+                <ui:VisualElement name="Dot2" style="width: 16px; height: 16px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.25);"/>
+                <ui:VisualElement name="Dot3" style="width: 16px; height: 16px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.25);"/>
+                <ui:VisualElement name="Dot4" style="width: 16px; height: 16px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.25);"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="BtnPrevWrap" style="flex-direction: row; align-items: center; gap: 8px; margin-left: 28px; cursor: link;">
+                <ui:VisualElement name="BadgePrev" style="width: 44px; height: 44px; border-radius: 4px; border-width: 1.5px; border-color: rgba(255, 255, 255, 0.6); align-items: center; justify-content: center;">
+                    <ui:Label text="L1" style="color: rgba(255, 255, 255, 0.6); font-size: 25px; -unity-text-align: middle-center; height: 31px; width: 22px;"/>
+                </ui:VisualElement>
+                <ui:Button name="BtnPrevious" text="PREVIOUS" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgba(255, 255, 255, 0.55); font-size: 25px; letter-spacing: 3px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="BtnNextWrap" style="flex-direction: row; align-items: center; gap: 8px; margin-left: 28px; cursor: link;">
+                <ui:VisualElement name="BadgeNext" style="width: 44px; height: 44px; border-radius: 4px; border-width: 1.5px; border-color: rgba(255, 255, 255, 0.6); align-items: center; justify-content: center;">
+                    <ui:Label text="R1" style="color: rgba(255, 255, 255, 0.6); font-size: 25px; -unity-text-align: middle-center;"/>
+                </ui:VisualElement>
+                <ui:Button name="BtnNext" text="NEXT" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgba(255, 255, 255, 0.55); font-size: 25px; letter-spacing: 3px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="BtnBackWrap" style="flex-direction: row; align-items: center; gap: 8px; margin-left: 28px; cursor: link;">
+                <ui:Button name="BtnBackOptions" text="BACK" style="background-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; color: rgb(255, 255, 255); font-size: 25px; letter-spacing: 3px; -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=6f2736f3c3b49894b90e1b9831c5c8d9&amp;type=3#NotInter-Regular&quot;);"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
