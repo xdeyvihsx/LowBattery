@@ -9,20 +9,22 @@ public class InGameOptionsController : MonoBehaviour
     [Header("Paneles hijos")]
     public UIDocument docAudio;
     public UIDocument docVideo;
+    public UIDocument docTutorial;
 
-    // IDs del OptionsUI.uxml — GameRow no existe en este UXML, solo Audio y Video
+    // IDs del OptionsUI.uxml
     private const string ID_ROW_AUDIO = "AudioRow";
     private const string ID_ROW_VIDEO = "VideoRow";
-    private const string ID_BACK      = "BackBtn";
-    private const string ID_ICON_L    = "StartIconLeft";
-    private const string ID_ICON_R    = "StartIconRight";
-    private const float  FADE         = 0.18f;
+    private const string ID_ROW_TUTORIAL = "TutorialRow";
+    private const string ID_BACK = "BackBtn";
+    private const string ID_ICON_L = "StartIconLeft";
+    private const string ID_ICON_R = "StartIconRight";
+    private const float FADE = 0.18f;
 
-    private UIDocument          doc;
+    private UIDocument doc;
     private PauseMenuController pauseCtrl;
-    private UIDocument          panelActivo = null;
+    private UIDocument panelActivo = null;
 
-    private List<VisualElement>                  rows  = new List<VisualElement>();
+    private List<VisualElement> rows = new List<VisualElement>();
     private Dictionary<VisualElement, Coroutine> fades = new Dictionary<VisualElement, Coroutine>();
     private bool registrado = false;
 
@@ -32,15 +34,17 @@ public class InGameOptionsController : MonoBehaviour
     {
         Ocultar(docAudio);
         Ocultar(docVideo);
+        Ocultar(docTutorial);
         Registrar();
     }
 
     public void AlAbrir(PauseMenuController pause)
     {
-        pauseCtrl   = pause;
+        pauseCtrl = pause;
         panelActivo = null;
         Ocultar(docAudio);
         Ocultar(docVideo);
+        Ocultar(docTutorial);
         ResetIconos();
     }
 
@@ -48,6 +52,7 @@ public class InGameOptionsController : MonoBehaviour
     {
         Ocultar(docAudio);
         Ocultar(docVideo);
+        Ocultar(docTutorial);
         panelActivo = null;
     }
 
@@ -67,6 +72,14 @@ public class InGameOptionsController : MonoBehaviour
             doc.rootVisualElement.style.display = DisplayStyle.Flex;
     }
 
+    public void CerrarPanelTutorial()
+    {
+        Ocultar(docTutorial);
+        panelActivo = null;
+        if (doc?.rootVisualElement != null)
+            doc.rootVisualElement.style.display = DisplayStyle.Flex;
+    }
+
     void Registrar()
     {
         if (doc?.rootVisualElement == null) return;
@@ -75,9 +88,9 @@ public class InGameOptionsController : MonoBehaviour
         rows.Clear();
         fades.Clear();
 
-        // Solo Audio y Video — GameRow no existe en OptionsUI.uxml
         BindRow(root, ID_ROW_AUDIO, () => AbrirPanel(docAudio));
         BindRow(root, ID_ROW_VIDEO, () => AbrirPanel(docVideo));
+        BindRow(root, ID_ROW_TUTORIAL, () => AbrirPanel(docTutorial));
 
         var btnBack = root.Q<VisualElement>(ID_BACK);
         if (btnBack != null)
@@ -113,6 +126,11 @@ public class InGameOptionsController : MonoBehaviour
         {
             var videoCtrl = panel.GetComponent<VideoOptionsController>();
             if (videoCtrl != null) videoCtrl.onBack = CerrarPanelVideo;
+        }
+        else if (panel == docTutorial)
+        {
+            var tutorialCtrl = panel.GetComponent<TutorialOptionsController>();
+            if (tutorialCtrl != null) tutorialCtrl.onBack = CerrarPanelTutorial;
         }
 
         if (panel.rootVisualElement != null)
